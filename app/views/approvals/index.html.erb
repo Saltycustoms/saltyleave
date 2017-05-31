@@ -1,0 +1,52 @@
+<h1>Approve Leave Applications</h1>
+
+<%= current_user.name %>
+<%= "#{pluralize(current_user.leave_days, 'day')} of leave available" %>
+<%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+
+<h2><%= link_to 'Back', leave_applications_path %></h2>
+
+<%= search_form_for @q, url: approvals_path do |f| %>
+  <%= f.label :start_date_start %>
+  <%= f.search_field :start_date_start %>
+  <br>
+  <%= f.label :end_date_start %>
+  <%= f.search_field :end_date_start %>
+  <br>
+  <%= f.submit %>
+<% end %>
+
+<table>
+  <tr>
+    <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
+    <th><%= sort_link(@q, :name, 'Name') %></th>
+    <% if current_user.is_director? %>
+      <th><%= sort_link(@q, :department, 'Department') %></th>
+    <% end %>
+    <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
+    <th><%= sort_link(@q, :start_date, 'Start Date') %></th>
+    <th><%= sort_link(@q, :end_date, 'End Date') %></th>
+    <th><%= sort_link(@q, :leave_duration, 'Leave Duration') %></th>
+    <th><%= sort_link(@q, :reason, 'Reason') %></th>
+    <th><%= sort_link(@q, :attachment, 'Attachment') %></th>
+    <th><%= sort_link(@q, :status, 'Status') %></th>
+  </tr>
+
+  <% @leave_applications.each do |leave_application| %>
+    <tr>
+      <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+      <td><%= leave_application.user.name %></td>
+      <% if current_user.is_director? %>
+        <td><%= leave_application.user.department %></td>
+      <% end %>
+      <td><%= leave_application.leave_type %></td>
+      <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+      <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+      <td><%= leave_application.leave_duration %></td>
+      <td><%= leave_application.reason %></td>
+      <td><%= link_to "download", download_path(leave_application.id) if leave_application.attachment.present? %></td>
+      <td><%= leave_application.status %></td>
+      <td><%= link_to 'Edit', edit_leave_application_path(leave_application.id) %></td>
+    </tr>
+  <% end %>
+</table>

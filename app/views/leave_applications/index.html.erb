@@ -1,0 +1,35 @@
+<h1>View Leave Applications</h1>
+
+<%= current_user.name %>
+<%= "#{pluralize(current_user.leave_days, 'day')} of leave available" %>
+<%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+
+<h2><%= link_to 'Apply for Leave', new_leave_application_path %></h2>
+<% if current_user.is_head? || current_user.is_director? %>
+  <h2><%= link_to 'Approve Leave Applications', approvals_path %></h2>
+  <h2><%= link_to 'View Users', users_path %></h2>
+<% end %>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Leave Type</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Leave Duration</th>
+    <th>Reason</th>
+    <th>Status</th>
+  </tr>
+
+  <% @leave_applications.each do |leave_application| %>
+    <tr>
+      <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+      <td><%= leave_application.leave_type %></td>
+      <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+      <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+      <td><%= leave_application.leave_duration %></td>
+      <td><%= leave_application.reason %></td>
+      <td><%= leave_application.status %></td>
+    </tr>
+  <% end %>
+</table>

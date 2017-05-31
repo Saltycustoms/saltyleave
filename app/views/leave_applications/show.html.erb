@@ -1,0 +1,20 @@
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Leave Type</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Leave Duration</th>
+    <th>Reason</th>
+  </tr>
+  <tr>
+    <td><%= @leave_application.created_at.strftime('%d/%m') %></td>
+    <td><%= @leave_application.leave_type %></td>
+    <td><%= @leave_application.start_date.strftime('%d/%m') %></td>
+    <td><%= @leave_application.end_date.strftime('%d/%m') %></td>
+    <td><%= @leave_application.leave_duration %></td>
+    <td><%= @leave_application.reason %></td>
+  </tr>
+</table>
+
+<%= link_to 'Back', leave_applications_path %>

@@ -1,0 +1,34 @@
+<h1>View Users</h1>
+
+<%= current_user.name %>
+<%= "#{pluralize(current_user.leave_days, 'day')} of leave available" %>
+<%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+
+<h2>
+  <%= link_to 'Add User', new_user_path %>
+  <%= link_to 'Back', leave_applications_path %>
+</h2>
+
+<table>
+  <tr>
+    <th><%= sort_link(@q, :id, 'ID') %></th>
+    <th><%= sort_link(@q, :name, 'Name') %></th>
+    <% if current_user.is_director? %>
+      <th><%= sort_link(@q, :department, [:department, 'name'], 'Department') %></th>
+    <% end %>
+    <th><%= sort_link(@q, :email, 'Email') %></th>
+    <th><%= sort_link(@q, :leave_days, [:leave_days, 'name'], 'Remaining Applicable Days')%></th>
+  </tr>
+
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= user.id %></td>
+      <td><%= user.name %></td>
+      <% if current_user.is_director? %>
+        <td><%= user.department %></td>
+      <% end %>
+      <td><%= user.email %></td>
+      <td><%= user.leave_days %></td>
+    </tr>
+  <% end %>
+</table>

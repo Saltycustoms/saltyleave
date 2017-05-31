@@ -1,0 +1,29 @@
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Name</th>
+    <th>Leave Type</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Leave Duration</th>
+    <th>Reason</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td><%= @leave_application.created_at.strftime('%d/%m') %></td>
+    <td><%= @leave_application.user.name %></td>
+    <td><%= @leave_application.leave_type %></td>
+    <td><%= @leave_application.start_date.strftime('%d/%m') %></td>
+    <td><%= @leave_application.end_date.strftime('%d/%m') %></td>
+    <td><%= @leave_application.leave_duration %></td>
+    <td><%= @leave_application.reason %></td>
+    <td><%= @leave_application.status %></td>
+  </tr>
+</table>
+
+<%= simple_form_for @leave_application do |f| %>
+  <%= f.input :status, collection: LeaveApplication.statuses.keys, include_blank: false %>
+  <%= f.button :submit %>
+<% end %>
+
+<%= link_to 'Back', approvals_path %>
