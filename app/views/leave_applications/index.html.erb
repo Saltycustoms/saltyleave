@@ -1,35 +1,61 @@
-<h1>View Leave Applications</h1>
+<html>
+  <head>
+  </head>
 
-<%= current_user.name %>
-<%= "#{pluralize(current_user.leave_days, 'day')} of leave available" %>
-<%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+  <body>
+    <header>
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li class="menu-text">Saltyleave</li>
+            <li class="menu-text">Current User: <%= current_user.name %></li>
+          </ul>
+        </div>
 
-<h2><%= link_to 'Apply for Leave', new_leave_application_path %></h2>
-<% if current_user.is_head? || current_user.is_director? %>
-  <h2><%= link_to 'Approve Leave Applications', approvals_path %></h2>
-  <h2><%= link_to 'View Users', users_path %></h2>
-<% end %>
+        <div class="top-bar-right">
+          <ul class="menu">
+            <li><a href="/leave_applications">View Leave Applications</a></li>
+            <li><a href="/leave_applications/new">Apply for Leave</a></li>
+            <% if current_user.is_head? || current_user.is_director? %>
+              <li><a href="/approvals">Approve Leave Applications</a></li>
+              <li><a href="/users">View Users</a></li>
+            <% end %>
+            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <br>
+    <div class="row">
+      <div class="large-10 large-offset-1 columns">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Leave Type</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Leave Duration</th>
+              <th>Reason</th>
+              <th>Status</th>
+            </tr>
+          </thead>
 
-<table>
-  <tr>
-    <th>Date</th>
-    <th>Leave Type</th>
-    <th>Start Date</th>
-    <th>End Date</th>
-    <th>Leave Duration</th>
-    <th>Reason</th>
-    <th>Status</th>
-  </tr>
-
-  <% @leave_applications.each do |leave_application| %>
-    <tr>
-      <td><%= leave_application.created_at.strftime('%d/%m') %></td>
-      <td><%= leave_application.leave_type %></td>
-      <td><%= leave_application.start_date.strftime('%d/%m') %></td>
-      <td><%= leave_application.end_date.strftime('%d/%m') %></td>
-      <td><%= leave_application.leave_duration %></td>
-      <td><%= leave_application.reason %></td>
-      <td><%= leave_application.status %></td>
-    </tr>
-  <% end %>
-</table>
+          <tbody>
+            <% @leave_applications.each do |leave_application| %>
+              <tr>
+                <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+                <td><%= leave_application.leave_type %></td>
+                <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+                <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+                <td><%= leave_application.leave_duration %></td>
+                <td><%= leave_application.reason %></td>
+                <td><%= leave_application.status %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

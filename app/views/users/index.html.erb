@@ -1,34 +1,63 @@
-<h1>View Users</h1>
+<html>
+  <head>
+  </head>
 
-<%= current_user.name %>
-<%= "#{pluralize(current_user.leave_days, 'day')} of leave available" %>
-<%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+  <body>
+    <header>
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li class="menu-text">Saltyleave</li>
+            <li class="menu-text">Current User: <%= current_user.name %></li>
+          </ul>
+        </div>
 
-<h2>
-  <%= link_to 'Add User', new_user_path %>
-  <%= link_to 'Back', leave_applications_path %>
-</h2>
+        <div class="top-bar-right">
+          <ul class="menu">
+            <li><a href="/leave_applications">View Leave Applications</a></li>
+            <li><a href="/leave_applications/new">Apply for Leave</a></li>
+            <% if current_user.is_head? || current_user.is_director? %>
+              <li><a href="/approvals">Approve Leave Applications</a></li>
+              <li><a href="/users">View Users</a></li>
+            <% end %>
+            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <br>
+    <div class="row">
+      <div class="large-10 large-offset-1 columns">
+        <table>
+          <thead>
+            <tr>
+              <th><%= sort_link(@q, :id, 'ID') %></th>
+              <th><%= sort_link(@q, :name, 'Name') %></th>
+              <% if current_user.is_director? %>
+                <th><%= sort_link(@q, :department, [:department, 'name'], 'Department') %></th>
+              <% end %>
+              <th><%= sort_link(@q, :email, 'Email') %></th>
+              <th><%= sort_link(@q, :leave_days, [:leave_days, 'name'], 'Remaining Applicable Days')%></th>
+            </tr>
+          </thead>
 
-<table>
-  <tr>
-    <th><%= sort_link(@q, :id, 'ID') %></th>
-    <th><%= sort_link(@q, :name, 'Name') %></th>
-    <% if current_user.is_director? %>
-      <th><%= sort_link(@q, :department, [:department, 'name'], 'Department') %></th>
-    <% end %>
-    <th><%= sort_link(@q, :email, 'Email') %></th>
-    <th><%= sort_link(@q, :leave_days, [:leave_days, 'name'], 'Remaining Applicable Days')%></th>
-  </tr>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr>
+                <td><%= user.id %></td>
+                <td><%= user.name %></td>
+                <% if current_user.is_director? %>
+                  <td><%= user.department %></td>
+                <% end %>
+                <td><%= user.email %></td>
+                <td><%= user.leave_days %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
 
-  <% @users.each do |user| %>
-    <tr>
-      <td><%= user.id %></td>
-      <td><%= user.name %></td>
-      <% if current_user.is_director? %>
-        <td><%= user.department %></td>
-      <% end %>
-      <td><%= user.email %></td>
-      <td><%= user.leave_days %></td>
-    </tr>
-  <% end %>
-</table>
+        <a href="/users/new" class="button">Add User</a>
+      </div>
+    </div>
+  </body>
+</html>

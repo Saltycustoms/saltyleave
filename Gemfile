@@ -35,9 +35,9 @@ gem 'simple_calendar', '~> 2.0'
 gem 'business_time'
 gem 'simple_form'
 gem 'devise'
-gem 'bootstrap',  git: 'https://github.com/twbs/bootstrap-rubygem'
 gem 'ransack'
 gem 'carrierwave', '~> 1.0'
+gem 'foundation-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

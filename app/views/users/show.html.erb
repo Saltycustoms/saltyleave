@@ -1,18 +1,56 @@
-<table>
-  <tr>
-    <td>ID</td>
-    <td>Name</td>
-    <td>Department</td>
-    <td>Email</td>
-    <td>Leave Days</td>
-  </tr>
-  <tr>
-    <td><%= @user.id %></td>
-    <td><%= @user.name %></td>
-    <td><%= @user.department%></td>
-    <td><%= @user.email %></td>
-    <td><%= @user.leave_days %></td>
-  </tr>
-</table>
+<html>
+  <head>
+  </head>
 
-<%= link_to 'Back', users_path %>
+  <body>
+    <header>
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li class="menu-text">Saltyleave</li>
+            <li class="menu-text">Current User: <%= current_user.name %></li>
+          </ul>
+        </div>
+
+        <div class="top-bar-right">
+          <ul class="menu">
+            <li><a href="/leave_applications">View Leave Applications</a></li>
+            <li><a href="/leave_applications/new">Apply for Leave</a></li>
+            <% if current_user.is_head? || current_user.is_director? %>
+              <li><a href="/approvals">Approve Leave Applications</a></li>
+              <li><a href="/users">View Users</a></li>
+            <% end %>
+            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <br>
+    <div class="row">
+      <div class="large-10 large-offset-1 columns">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Email</th>
+              <th>Leave Days</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @user.id %></td>
+              <td><%= @user.name %></td>
+              <td><%= @user.department%></td>
+              <td><%= @user.email %></td>
+              <td><%= @user.leave_days %></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <a href="/users" class="button">Back</a>
+      </div>
+    </div>
+  </body>
+</html>

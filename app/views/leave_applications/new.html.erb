@@ -1,33 +1,65 @@
-<h1>Apply for leave</h1>
-<div align=left>
-  <%= month_calendar do |date| %>
-    <%= date.mday %>
-  <% end %>
-</div>
+<html>
+  <head>
+  </head>
 
-<div>
-  <% if @leave_application.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@leave_application.errors.count, "error") %> prohibited this application from being saved:
-      </h2>
-      <ul>
-        <% @leave_application.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
+  <body>
+    <header>
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li class="menu-text">Saltyleave</li>
+            <li class="menu-text">Current User: <%= current_user.name %></li>
+          </ul>
+        </div>
+
+        <div class="top-bar-right">
+          <ul class="menu">
+            <li><a href="/leave_applications">View Leave Applications</a></li>
+            <li><a href="/leave_applications/new">Apply for Leave</a></li>
+            <% if current_user.is_head? || current_user.is_director? %>
+              <li><a href="/approvals">Approve Leave Applications</a></li>
+              <li><a href="/users">View Users</a></li>
+            <% end %>
+            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <br>
+    <div class="row">
+      <div class="large-7 columns">
+        <h4>Calendar</h4>
+        <%= month_calendar do |date| %>
+          <%= date.mday %>
         <% end %>
-      </ul>
+      </div>
+
+      <div class="large-4 large-offset-1 columns">
+        <% if @leave_application.errors.any? %>
+          <div class="callout alert" id="error_explanation">
+            <h4>
+              <%= pluralize(@leave_application.errors.count, "error") %> prohibited this application from being saved:
+            </h4>
+            <ul>
+              <% @leave_application.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <h4><%= "#{pluralize(current_user.leave_days, 'day')} of leave available" %></h4>
+
+        <%= simple_form_for :leave_application, url: leave_applications_path do |f| %>
+          <%= f.input :leave_type, collection: LeaveApplication.leave_types.keys, include_blank: false %>
+          <%= f.input :start_date, as: :date %>
+          <%= f.input :end_date, as: :date %>
+          <%= f.input :leave_duration, collection: LeaveApplication.leave_durations.keys, include_blank: false %>
+          <%= f.input :reason, as: :text, placeholder: 'Just a brief description' %>
+          <%= f.input :attachment, as: :file, required: false %>
+          <%= f.button :submit %>
+        <% end %>
+      </div>
     </div>
-  <% end %>
-
-  <%= simple_form_for :leave_application, url: leave_applications_path do |f| %>
-    <%= f.input :leave_type, collection: LeaveApplication.leave_types.keys, include_blank: false %>
-    <%= f.input :start_date, as: :date %>
-    <%= f.input :end_date, as: :date %>
-    <%= f.input :leave_duration, collection: LeaveApplication.leave_durations.keys, include_blank: false %>
-    <%= f.input :reason, as: :text %>
-    <%= f.input :attachment, as: :file, required: false %>
-    <%= f.button :submit %>
-  <% end %>
-
-  <%= link_to 'Back', leave_applications_path %>
-</div>
+  </body>
+</html>
