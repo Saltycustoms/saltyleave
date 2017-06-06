@@ -17,7 +17,7 @@
             <li><a href="/leave_applications">View Leave Applications</a></li>
             <li><a href="/leave_applications/new">Apply for Leave</a></li>
             <% if current_user.is_head? || current_user.is_director? %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
+              <li class="menu-text">Approve Leave Applications</li>
               <li><a href="/users">View Users</a></li>
             <% end %>
             <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
@@ -64,23 +64,25 @@
 
           <tbody>
             <% @leave_applications.each do |leave_application| %>
-              <tr>
-                <td><%= leave_application.created_at.strftime('%d/%m') %></td>
-                <td><%= leave_application.user.name %></td>
-                <% if current_user.is_director? %>
-                  <td><%= leave_application.user.department %></td>
-                <% end %>
-                <td><%= leave_application.leave_type %></td>
-                <td><%= leave_application.start_date.strftime('%d/%m') %></td>
-                <td><%= leave_application.end_date.strftime('%d/%m') %></td>
-                <td><%= leave_application.leave_duration %></td>
-                <td><%= leave_application.reason %></td>
-                <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
-                <td><%= leave_application.status %></td>
-                <td><%= link_to 'Edit', edit_leave_application_path(leave_application.id) %></td>
-              </tr>
+              <% if leave_application.user.id != current_user.id %>
+                <tr>
+                  <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+                  <td><%= leave_application.user.name %></td>
+                  <% if current_user.is_director? %>
+                    <td><%= leave_application.user.department %></td>
+                  <% end %>
+                  <td><%= leave_application.leave_type %></td>
+                  <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+                  <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+                  <td><%= leave_application.leave_duration %></td>
+                  <td><%= leave_application.reason %></td>
+                  <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
+                  <td><%= leave_application.status %></td>
+                  <td><%= link_to 'Edit', edit_leave_application_path(leave_application.id) %></td>
+                </tr>
+              <% end %>
             <% end %>
-        </tbody>
+          </tbody>
         </table>
       </div>
     </div>

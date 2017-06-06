@@ -1,6 +1,7 @@
 require 'open-uri'
 class LeaveApplicationsController < ApplicationController
   before_action :authenticate_user!
+  before_filter :set_beginning_of_week
 
   def download
     @leave_application = LeaveApplication.find(params[:id])
@@ -10,7 +11,10 @@ class LeaveApplicationsController < ApplicationController
   end
 
   def index
-    @leave_applications = LeaveApplication.where(user_id: current_user.id)
+    @q = LeaveApplication.ransack(params[:q])
+
+    ids = User.where(department: current_user.department).ids
+    @leave_applications = @q.result.where(user_id: ids)
   end
 
   def show
@@ -18,10 +22,12 @@ class LeaveApplicationsController < ApplicationController
   end
 
   def new
-    if current_user.leave_days <= 0
-      #Placeholder: Display an error message
-    else
+    @leaves = LeaveApplication.all
+
+    if current_user.leave_days > 0
       @leave_application = LeaveApplication.new
+    else
+      #Placeholder: Display an error message
     end
   end
 
@@ -54,8 +60,19 @@ class LeaveApplicationsController < ApplicationController
     end
   end
 
+  def destroy
+    @leave_application = LeaveApplication.find(params[:id])
+    @leave_application.destroy
+
+    redirect_to leave_applications_path
+  end
+
   private
     def leave_application_params
       params.require(:leave_application).permit(:leave_type, :start_date, :end_date, :leave_duration, :reason, :attachment, :status)
+    end
+
+    def set_beginning_of_week
+      Date.beginning_of_week = :sunday
     end
 end

@@ -14,7 +14,7 @@
 
         <div class="top-bar-right">
           <ul class="menu">
-            <li><a href="/leave_applications">View Leave Applications</a></li>
+            <li class="menu-text">View Leave Applications</li>
             <li><a href="/leave_applications/new">Apply for Leave</a></li>
             <% if current_user.is_head? || current_user.is_director? %>
               <li><a href="/approvals">Approve Leave Applications</a></li>
@@ -27,8 +27,9 @@
     </header>
     <br>
     <div class="row">
-      <div class="large-10 large-offset-1 columns">
+      <div class="large-10 large-centered columns">
         <table>
+          <caption>Your Leave Applications</caption>
           <thead>
             <tr>
               <th>Date</th>
@@ -43,19 +44,59 @@
 
           <tbody>
             <% @leave_applications.each do |leave_application| %>
-              <tr>
-                <td><%= leave_application.created_at.strftime('%d/%m') %></td>
-                <td><%= leave_application.leave_type %></td>
-                <td><%= leave_application.start_date.strftime('%d/%m') %></td>
-                <td><%= leave_application.end_date.strftime('%d/%m') %></td>
-                <td><%= leave_application.leave_duration %></td>
-                <td><%= leave_application.reason %></td>
-                <td><%= leave_application.status %></td>
-              </tr>
+              <% if leave_application.user_id == current_user.id %>
+                <tr>
+                  <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+                  <td><%= leave_application.leave_type %></td>
+                  <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+                  <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+                  <td><%= leave_application.leave_duration %></td>
+                  <td><%= leave_application.reason %></td>
+                  <td><%= leave_application.status %></td>
+                  <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                </tr>
+              <% end %>
             <% end %>
           </tbody>
         </table>
       </div>
+
+      <% if current_user.is_director? == false %>
+        <div class="columns">
+          <table>
+            <caption>Leave Applications in Your Department</caption>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Leave Duration</th>
+                <th>Reason</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @leave_applications.each do |leave_application| %>
+                <% if leave_application.user_id != current_user.id %>
+                  <tr>
+                    <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+                    <td><%= leave_application.user.name %></td>
+                    <td><%= leave_application.leave_type %></td>
+                    <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+                    <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+                    <td><%= leave_application.leave_duration %></td>
+                    <td><%= leave_application.reason %></td>
+                    <td><%= leave_application.status %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
     </div>
   </body>
 </html>
