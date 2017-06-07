@@ -28,15 +28,19 @@
     <br>
     <div class="row">
       <%= search_form_for @q, url: approvals_path do |f| %>
-        <div class="large-4 large-offset-1 columns">
+        <div class="large-3 large-offset-1 columns">
           <%= f.label :start_date_start %>
           <%= f.search_field :start_date_start %>
         </div>
-        <div class="large-4 columns">
+        <div class="large-3 columns">
           <%= f.label :end_date_start %>
           <%= f.search_field :end_date_start %>
         </div>
-        <div class="large-2 columns">
+        <div class="large-3 columns">
+          <%= f.label :user_name_cont %>
+          <%= f.search_field :user_name_cont %>
+        </div>
+        <div class="large-1 columns">
           <%= f.submit %>
         </div>
       <% end %>
@@ -48,9 +52,9 @@
           <thead>
             <tr>
               <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
-              <th><%= sort_link(@q, :name, 'Name') %></th>
+              <th><%= sort_link(@q, :user_name, 'Name') %></th>
               <% if current_user.is_director? %>
-                <th><%= sort_link(@q, :department, 'Department') %></th>
+                <th><%= sort_link(@q, :user_department, 'Department') %></th>
               <% end %>
               <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
               <th><%= sort_link(@q, :start_date, 'Start Date') %></th>

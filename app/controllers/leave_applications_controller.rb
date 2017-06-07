@@ -24,7 +24,7 @@ class LeaveApplicationsController < ApplicationController
   def new
     @leaves = LeaveApplication.all
 
-    if current_user.leave_days > 0
+    if current_user.annual_days > 0 && current_user.sick_days > 0 && current_user.unpaid_days > 0
       @leave_application = LeaveApplication.new
     else
       #Placeholder: Display an error message
@@ -51,7 +51,15 @@ class LeaveApplicationsController < ApplicationController
     if @leave_application.update(leave_application_params)
       if @leave_application.approved?
         duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
-        @leave_application.user.leave_days -= duration
+
+        case @leave_application.leave_type
+        when 0
+          @leave_application.user.annual_days -= duration
+        when 1
+          @leave_application.user.sick_days -= duration
+        when 2
+          @leave_application.user.unpaid_days -= duration
+        end
       end
       @leave_application.user.save
       redirect_to @leave_application

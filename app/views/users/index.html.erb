@@ -34,10 +34,12 @@
               <th><%= sort_link(@q, :id, 'ID') %></th>
               <th><%= sort_link(@q, :name, 'Name') %></th>
               <% if current_user.is_director? %>
-                <th><%= sort_link(@q, :department, [:department, 'name'], 'Department') %></th>
+                <th><%= sort_link(@q, :department, [:department, 'name asc'], 'Department') %></th>
               <% end %>
               <th><%= sort_link(@q, :email, 'Email') %></th>
-              <th><%= sort_link(@q, :leave_days, [:leave_days, 'name'], 'Remaining Applicable Days')%></th>
+              <th><%= sort_link(@q, :annual_days, [:annual_days, 'name asc'], 'Annual Leave Days')%></th>
+              <th><%= sort_link(@q, :sick_days, [:sick_days, 'name asc'], 'Sick Leave Days')%></th>
+              <th><%= sort_link(@q, :unpaid_days, [:unpaid_days, 'name asc'], 'Unpaid Leave Days')%></th>
             </tr>
           </thead>
 
@@ -50,7 +52,9 @@
                   <td><%= user.department %></td>
                 <% end %>
                 <td><%= user.email %></td>
-                <td><%= user.leave_days %></td>
+                <td><%= user.annual_days %></td>
+                <td><%= user.sick_days %></td>
+                <td><%= user.unpaid_days %></td>
               </tr>
             <% end %>
           </tbody>
