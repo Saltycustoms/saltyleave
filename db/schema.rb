@@ -47,12 +47,12 @@ ActiveRecord::Schema.define(version: 20170607100854) do
     t.string   "last_sign_in_ip"
     t.string   "name"
     t.string   "department"
-    t.boolean  "is_head"
-    t.boolean  "is_director"
     t.integer  "annual_days",            default: 20
     t.integer  "sick_days",              default: 20
     t.integer  "unpaid_days",            default: 20
     t.integer  "roles_mask"
+    t.boolean  "is_director"
+    t.boolean  "is_head"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
