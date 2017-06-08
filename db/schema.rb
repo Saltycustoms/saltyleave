@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606093546) do
+ActiveRecord::Schema.define(version: 20170607100854) do
 
   create_table "leave_applications", force: :cascade do |t|
     t.integer  "leave_type"
@@ -23,6 +23,12 @@ ActiveRecord::Schema.define(version: 20170606093546) do
     t.integer  "status",         default: 0
     t.integer  "user_id"
     t.string   "attachment"
+  end
+
+  create_table "leave_types", force: :cascade do |t|
+    t.string   "leave_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -46,6 +52,7 @@ ActiveRecord::Schema.define(version: 20170606093546) do
     t.integer  "annual_days",            default: 20
     t.integer  "sick_days",              default: 20
     t.integer  "unpaid_days",            default: 20
+    t.integer  "roles_mask"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

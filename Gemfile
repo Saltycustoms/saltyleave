@@ -38,6 +38,7 @@ gem 'devise'
 gem 'ransack'
 gem 'carrierwave', '~> 1.0'
 gem 'foundation-rails'
+gem 'role_model'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
