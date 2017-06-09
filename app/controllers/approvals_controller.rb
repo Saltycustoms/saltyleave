@@ -2,7 +2,7 @@ class ApprovalsController < ApplicationController
   def index
     @q = LeaveApplication.ransack(params[:q])
 
-    if current_user.is_director?
+    if current_user.is? :director
       @leave_applications = @q.result.where(status: 0).includes(:user)
     else
       ids = User.where(department: current_user.department).ids

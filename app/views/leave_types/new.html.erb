@@ -19,7 +19,7 @@
             <% if current_user.is_any_of? :head, :diretor, :admin %>
               <li><a href="/approvals">Approve Leave Applications</a></li>
               <li><a href="/users">View Users</a></li>
-              <li><a href="/leave_types/new">Add Leave Type</a></li>
+              <li class="menu-text">Add Leave Type</li>
             <% end %>
             <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
           </ul>
@@ -28,33 +28,13 @@
     </header>
     <br>
     <div class="row">
-      <div class="large-10 large-offset-1 columns">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Department</th>
-              <th>Email</th>
-              <th>Annual Days</th>
-              <th>Sick Days</th>
-              <th>Unpaid Days</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><%= @user.id %></td>
-              <td><%= @user.name %></td>
-              <td><%= @user.department%></td>
-              <td><%= @user.email %></td>
-              <td><%= @user.annual_days %></td>
-              <td><%= @user.sick_days %></td>
-              <td><%= @user.unpaid_days %></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="large-6 large-offset-3 columns">
 
-        <a href="/users" class="button">Back</a>
+        <%= simple_form_for :leave_type do |f| %>
+          <%= f.input :name, placeholder: 'e.g. Annual, Sick' %>
+          <%= f.button :submit %>
+        <% end %>
+
       </div>
     </div>
   </body>

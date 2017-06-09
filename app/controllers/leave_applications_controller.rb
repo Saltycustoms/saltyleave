@@ -22,7 +22,7 @@ class LeaveApplicationsController < ApplicationController
   end
 
   def new
-    @leaves = LeaveApplication.all
+    @leaves = LeaveApplication.where(status: 1)
 
     if current_user.annual_days > 0 && current_user.sick_days > 0 && current_user.unpaid_days > 0
       @leave_application = LeaveApplication.new
@@ -52,12 +52,12 @@ class LeaveApplicationsController < ApplicationController
       if @leave_application.approved?
         duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
 
-        case @leave_application.leave_type
-        when 0
-          @leave_application.user.annual_days -= duration
+        case @leave_application.leave_type_id
         when 1
-          @leave_application.user.sick_days -= duration
+          @leave_application.user.annual_days -= duration
         when 2
+          @leave_application.user.sick_days -= duration
+        when 3
           @leave_application.user.unpaid_days -= duration
         end
       end
@@ -77,7 +77,7 @@ class LeaveApplicationsController < ApplicationController
 
   private
     def leave_application_params
-      params.require(:leave_application).permit(:leave_type, :start_date, :end_date, :leave_duration, :reason, :attachment, :status)
+      params.require(:leave_application).permit(:leave_type_id, :start_date, :end_date, :leave_duration, :reason, :attachment, :status)
     end
 
     def set_beginning_of_week

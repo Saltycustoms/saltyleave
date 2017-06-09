@@ -16,9 +16,10 @@
           <ul class="menu">
             <li><a href="/leave_applications">View Leave Applications</a></li>
             <li class="menu-text">Apply for Leave</li>
-            <% if current_user.is_head? || current_user.is_director? %>
+            <% if current_user.is_any_of? :head, :diretor, :admin %>
               <li><a href="/approvals">Approve Leave Applications</a></li>
               <li><a href="/users">View Users</a></li>
+              <li><a href="/leave_types/new">Add Leave Type</a></li>
             <% end %>
             <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
           </ul>
@@ -70,7 +71,7 @@
         </h6>
 
         <%= simple_form_for :leave_application, url: leave_applications_path do |f| %>
-          <%= f.input :leave_type, collection: LeaveApplication.leave_types.keys, include_blank: false %>
+          <%= f.input :leave_type_id, collection: LeaveType.all.collect{|type| ["#{type.name}", type.id]}, include_blank: false %>
           <%= f.input :start_date, as: :date %>
           <%= f.input :end_date, as: :date %>
           <%= f.input :leave_duration, collection: LeaveApplication.leave_durations.keys, include_blank: false %>

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get '/download/:id', to: 'leave_applications#download', as: 'download'
   devise_for :users
 
+  resources :leave_types
   resources :leave_applications
   resources :approvals
   resources :users

@@ -13,12 +13,26 @@
         </div>
 
         <div class="top-bar-right">
-          <ul class="menu">
-            <li class="menu-text">View Leave Applications</li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_head? || current_user.is_director? %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
-              <li><a href="/users">View Users</a></li>
+          <ul class="dropdown menu" data-dropdown-menu>
+            <li>
+              <a>Leave Applications</a>
+              <ul class="menu">
+                <li class="menu-text">View Leave Applications</li>
+                <li><a href="/leave_applications/new">Apply for Leave</a></li>
+                <% if current_user.is_any_of? :head, :director, :admin %>
+                  <li><a href="/approvals">Approve Leave Applications</a></li>
+                <% end %>
+              </ul>
+            </li>
+
+            <% if current_user.is_any_of? :head, :diretor, :admin %>
+              <li>
+                <a>User Settings</a>
+                <ul class="menu">
+                  <li><a href="/users">View Users</a></li>
+                  <li><a href="/leave_types/new">Add Leave Type</a></li>
+                </ul>
+              </li>
             <% end %>
             <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
           </ul>
@@ -47,13 +61,15 @@
               <% if leave_application.user_id == current_user.id %>
                 <tr>
                   <td><%= leave_application.created_at.strftime('%d/%m') %></td>
-                  <td><%= leave_application.leave_type %></td>
+                  <td><%= leave_application.leave_type.name %></td>
                   <td><%= leave_application.start_date.strftime('%d/%m') %></td>
                   <td><%= leave_application.end_date.strftime('%d/%m') %></td>
                   <td><%= leave_application.leave_duration %></td>
                   <td><%= leave_application.reason %></td>
                   <td><%= leave_application.status %></td>
-                  <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  <% if leave_application.status == "pending" %>
+                    <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  <% end %>
                 </tr>
               <% end %>
             <% end %>
@@ -84,7 +100,7 @@
                   <tr>
                     <td><%= leave_application.created_at.strftime('%d/%m') %></td>
                     <td><%= leave_application.user.name %></td>
-                    <td><%= leave_application.leave_type %></td>
+                    <td><%= leave_application.leave_type.name %></td>
                     <td><%= leave_application.start_date.strftime('%d/%m') %></td>
                     <td><%= leave_application.end_date.strftime('%d/%m') %></td>
                     <td><%= leave_application.leave_duration %></td>

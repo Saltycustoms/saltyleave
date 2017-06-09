@@ -1,5 +1,6 @@
 class LeaveApplication < ApplicationRecord
   belongs_to :user
+  belongs_to :leave_type
 
   mount_uploader :attachment, AvatarUploader
 
@@ -10,7 +11,6 @@ class LeaveApplication < ApplicationRecord
   validates :reason, presence: true
   validate :valid_date
 
-  enum leave_type: [ :annual, :sick, :unpaid ]
   enum leave_duration: [ :full_day, :am, :pm ]
   enum status: [ :pending, :approved, :rejected ]
 
