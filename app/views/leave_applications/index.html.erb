@@ -13,28 +13,16 @@
         </div>
 
         <div class="top-bar-right">
-          <ul class="dropdown menu" data-dropdown-menu>
-            <li>
-              <a>Leave Applications</a>
-              <ul class="menu">
-                <li class="menu-text">View Leave Applications</li>
-                <li><a href="/leave_applications/new">Apply for Leave</a></li>
-                <% if current_user.is_any_of? :head, :director, :admin %>
-                  <li><a href="/approvals">Approve Leave Applications</a></li>
-                <% end %>
-              </ul>
-            </li>
-
+          <ul class="menu">
+            <li class="menu-text">View Leave Applications</li>
+            <li><a href="/leave_applications/new">Apply for Leave</a></li>
             <% if current_user.is_any_of? :head, :diretor, :admin %>
-              <li>
-                <a>User Settings</a>
-                <ul class="menu">
-                  <li><a href="/users">View Users</a></li>
-                  <li><a href="/leave_types/new">Add Leave Type</a></li>
-                </ul>
-              </li>
+              <li><a href="/approvals">Approve Leave Applications</a></li>
+              <li><a href="/users">View Users</a></li>
+              <li><a href="/leave_types/new">Add Leave Type</a></li>
             <% end %>
             <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
+          </ul>
           </ul>
         </div>
       </div>

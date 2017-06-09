@@ -1,3 +1,8 @@
+<%#
+  Fill with code allowing admins to edit user attributes
+  e.g. Name, Department, Days of leave allowed, Roles
+%>
+
 <html>
   <head>
   </head>
@@ -28,40 +33,34 @@
     </header>
     <br>
     <div class="row">
-      <div class="large-10 large-offset-1 columns">
+      <div class="large-12 columns">
         <table>
           <thead>
             <tr>
-              <th>Date</th>
               <th>Name</th>
-              <th>Leave Type</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Leave Duration</th>
-              <th>Reason</th>
-              <th>Status</th>
+              <th>Department</th>
+              <th>Email</th>
+              <th>Annual Leave Days</th>
+              <th>Sick Leave Days</th>
+              <th>Unpaid Leave Days</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><%= @leave_application.created_at.strftime('%d/%m') %></td>
-              <td><%= @leave_application.user.name %></td>
-              <td><%= @leave_application.leave_type.name %></td>
-              <td><%= @leave_application.start_date.strftime('%d/%m') %></td>
-              <td><%= @leave_application.end_date.strftime('%d/%m') %></td>
-              <td><%= @leave_application.leave_duration %></td>
-              <td><%= @leave_application.reason %></td>
-              <td>
-                <%= simple_form_for @leave_application do |f| %>
-                  <%= f.input :status, collection: LeaveApplication.statuses.keys, include_blank: false %>
-                  <%= f.submit %>
-                <% end %>
-              </td>
+              <%= simple_form_for @user do |f| %>
+                <td><%= f.input :name %></td>
+                <td><%= f.input :department %></td>
+                <td><%= f.input :email %></td>
+                <td><%= f.input :annual_days, as: :integer %></td>
+                <td><%= f.input :sick_days, as: :integer %></td>
+                <td><%= f.input :unpaid_days, as: :integer %></td>
+                <td><%= f.submit %></td>
+              <% end %>
             </tr>
           </tbody>
         </table>
 
-        <a href="/approvals" class="button">Back</a>
+        <a href="/users" class="button">Back</a>
       </div>
     </div>
   </body>

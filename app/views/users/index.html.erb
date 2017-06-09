@@ -58,6 +58,9 @@
                 <td><%= user.sick_days %></td>
                 <td><%= user.unpaid_days %></td>
                 <td><%= user.role_symbols %></td>
+                <% if current_user.is? :admin %>
+                  <td><%= link_to 'Edit', edit_user_path(user.id) %></td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>
