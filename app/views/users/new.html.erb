@@ -43,12 +43,13 @@
 
         <%= simple_form_for :user, url: users_path do |f| %>
           <%= f.input :name %>
-          <%= f.input :department %>
+          <%= f.input :department, collection: User.departments.keys, include_blank: false %>
+          <%= f.input :region, collection: User.regions.keys, include_blank: false, as: :radio_buttons %>
+          <%= f.input :roles, collection: User.valid_roles, as: :check_boxes %>
           <%= f.input :email %>
           <%= f.input :password %>
           <%= f.button :submit %>
         <% end %>
-
       </div>
     </div>
   </body>

@@ -12,6 +12,7 @@ class LeaveApplicationsController < ApplicationController
 
   def index
     @q = LeaveApplication.ransack(params[:q])
+    @leaves = LeaveApplication.where(status: 1)
 
     ids = User.where(department: current_user.department).ids
     @leave_applications = @q.result.where(user_id: ids)

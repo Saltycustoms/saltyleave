@@ -7,6 +7,9 @@ class User < ApplicationRecord
   roles_attribute :roles_mask
   roles :employee, :head, :director, :admin
 
+  enum department: [ :Tech, :Creative, :Sales, :Procurement, :Logistics, :People, :Finance ]
+  enum region: [ :Malaysia, :Singapore ]
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
