@@ -1,59 +1,28 @@
-<html>
-  <head>
-  </head>
+<div class="row">
+  <div class="large-10 large-centered columns">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Leave Type</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Leave Duration</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= @leave_application.created_at.strftime('%d/%m') %></td>
+          <td><%= @leave_application.leave_type.name %></td>
+          <td><%= @leave_application.start_date.strftime('%d/%m') %></td>
+          <td><%= @leave_application.end_date.strftime('%d/%m') %></td>
+          <td><%= @leave_application.leave_duration %></td>
+          <td><%= @leave_application.reason %></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <body>
-    <header>
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Saltyleave</li>
-            <li class="menu-text">Current User: <%= current_user.name %></li>
-          </ul>
-        </div>
-
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li><a href="/leave_applications">View Leave Applications</a></li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_any_of? :head, :diretor, :admin %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
-              <li><a href="/users">View Users</a></li>
-              <li><a href="/leave_types/new">Add Leave Type</a></li>
-            <% end %>
-            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
-          </ul>
-        </div>
-      </div>
-    </header>
-    <br>
-    <div class="row">
-      <div class="large-10 large-centered columns">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Leave Type</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Leave Duration</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><%= @leave_application.created_at.strftime('%d/%m') %></td>
-              <td><%= @leave_application.leave_type.name %></td>
-              <td><%= @leave_application.start_date.strftime('%d/%m') %></td>
-              <td><%= @leave_application.end_date.strftime('%d/%m') %></td>
-              <td><%= @leave_application.leave_duration %></td>
-              <td><%= @leave_application.reason %></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <a href="/leave_applications" class="button">Back</a>
-      </div>
-    </div>
-  </body>
-</html>
+    <a href="/leave_applications" class="button">Back</a>
+  </div>
+</div>

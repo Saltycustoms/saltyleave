@@ -1,56 +1,26 @@
-<html>
-  <head>
-  </head>
-
-  <body>
-    <header>
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Saltyleave</li>
-            <li class="menu-text">Current User: <%= current_user.name %></li>
-          </ul>
-        </div>
-
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li><a href="/leave_applications">View Leave Applications</a></li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_head? || current_user.is_director? %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
-              <li><a href="/users">View Users</a></li>
-            <% end %>
-            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
-          </ul>
-        </div>
+<div class="row">
+  <div class="large-6 large-offset-3 columns">
+    <% if @user.errors.any? %>
+      <div class="callout alert" id="error_explanation">
+        <h4>
+          <%= pluralize(@user.errors.count, "error") %> prohibited this application from being saved:
+        </h4>
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
       </div>
-    </header>
-    <br>
-    <div class="row">
-      <div class="large-6 large-offset-3 columns">
-        <% if @user.errors.any? %>
-          <div class="callout alert" id="error_explanation">
-            <h4>
-              <%= pluralize(@user.errors.count, "error") %> prohibited this application from being saved:
-            </h4>
-            <ul>
-              <% @user.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-              <% end %>
-            </ul>
-          </div>
-        <% end %>
+    <% end %>
 
-        <%= simple_form_for :user, url: users_path do |f| %>
-          <%= f.input :name %>
-          <%= f.input :department, collection: User.departments.keys, include_blank: false %>
-          <%= f.input :region, collection: User.regions.keys, include_blank: false, as: :radio_buttons %>
-          <%= f.input :roles, collection: User.valid_roles, as: :check_boxes %>
-          <%= f.input :email %>
-          <%= f.input :password %>
-          <%= f.button :submit %>
-        <% end %>
-      </div>
-    </div>
-  </body>
-</html>
+    <%= simple_form_for :user, url: users_path do |f| %>
+      <%= f.input :name %>
+      <%= f.input :department, collection: User.departments.keys, include_blank: false %>
+      <%= f.input :region, collection: User.regions.keys, include_blank: false, as: :radio_buttons %>
+      <%= f.input :roles, collection: User.valid_roles, as: :check_boxes %>
+      <%= f.input :email %>
+      <%= f.input :password %>
+      <%= f.button :submit %>
+    <% end %>
+  </div>
+</div>

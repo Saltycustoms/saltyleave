@@ -1,127 +1,95 @@
-<html>
-  <head>
-  </head>
+<div class="row">
+  <div class="columns">
+    <ul class="tabs" data-tabs id="index-tabs">
+      <li class="tabs-title is-active"><a href="#calendar">Calendar</a></li>
+      <li class="tabs-title"><a href="#tables">Leave Applications</a></li>
+    </ul>
 
-  <body>
-    <header>
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Saltyleave</li>
-            <li class="menu-text">Current User: <%= current_user.name %></li>
-          </ul>
-        </div>
+    <div class="tabs-content" data-tabs-content="index-tabs">
+      <div class="tabs-panel is-active" id="calendar">
+        <h4>Calendar</h4>
+        <%= month_calendar events: @leaves do |date, leave_applications| %>
+          <%= date.mday %>
 
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li class="menu-text">View Leave Applications</li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_any_of? :head, :diretor, :admin %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
-              <li><a href="/users">View Users</a></li>
-              <li><a href="/leave_types/new">Add Leave Type</a></li>
+          <% if !date.saturday? && !date.sunday? %>
+            <% leave_applications.each do |leave_application| %>
+              <div>
+                <%= leave_application.user.name %>
+              </div>
             <% end %>
-            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
-          </ul>
-          </ul>
-        </div>
+          <% end %>
+        <% end %>
       </div>
-    </header>
-    <br>
-    <div class="row">
-      <div class="columns">
-        <ul class="tabs" data-tabs id="index-tabs">
-          <li class="tabs-title is-active"><a href="#calendar">Calendar</a></li>
-          <li class="tabs-title"><a href="#tables">Leave Applications</a></li>
-        </ul>
+      <div class="tabs-panel" id="tables">
+        <table>
+          <caption>Your Leave Applications</caption>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Leave Type</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Leave Duration</th>
+              <th>Reason</th>
+              <th>Status</th>
+            </tr>
+          </thead>
 
-        <div class="tabs-content" data-tabs-content="index-tabs">
-          <div class="tabs-panel is-active" id="calendar">
-            <h4>Calendar</h4>
-            <%= month_calendar events: @leaves do |date, leave_applications| %>
-              <%= date.mday %>
-
-              <% if !date.saturday? && !date.sunday? %>
-                <% leave_applications.each do |leave_application| %>
-                  <div>
-                    <%= leave_application.user.name %>
-                  </div>
-                <% end %>
+          <tbody>
+            <% @leave_applications.each do |leave_application| %>
+              <% if leave_application.user_id == current_user.id %>
+                <tr>
+                  <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+                  <td><%= leave_application.leave_type.name %></td>
+                  <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+                  <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+                  <td><%= leave_application.leave_duration %></td>
+                  <td><%= leave_application.reason %></td>
+                  <td><%= leave_application.status %></td>
+                  <% if leave_application.status == "pending" %>
+                    <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  <% end %>
+                </tr>
               <% end %>
             <% end %>
-          </div>
-          <div class="tabs-panel" id="tables">
-            <table>
-              <caption>Your Leave Applications</caption>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Leave Type</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
-                  <th>Leave Duration</th>
-                  <th>Reason</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
+          </tbody>
+        </table>
 
-              <tbody>
-                <% @leave_applications.each do |leave_application| %>
-                  <% if leave_application.user_id == current_user.id %>
-                    <tr>
-                      <td><%= leave_application.created_at.strftime('%d/%m') %></td>
-                      <td><%= leave_application.leave_type.name %></td>
-                      <td><%= leave_application.start_date.strftime('%d/%m') %></td>
-                      <td><%= leave_application.end_date.strftime('%d/%m') %></td>
-                      <td><%= leave_application.leave_duration %></td>
-                      <td><%= leave_application.reason %></td>
-                      <td><%= leave_application.status %></td>
-                      <% if leave_application.status == "pending" %>
-                        <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-                      <% end %>
-                    </tr>
-                  <% end %>
-                <% end %>
-              </tbody>
-            </table>
+        <% if (current_user.is? :director) == false %>
+          <table>
+            <caption>Leave Applications in Your Department</caption>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Leave Duration</th>
+                <th>Reason</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-            <% if (current_user.is? :director) == false %>
-              <table>
-                <caption>Leave Applications in Your Department</caption>
-                <thead>
+            <tbody>
+              <% @leave_applications.each do |leave_application| %>
+                <% if leave_application.user_id != current_user.id %>
                   <tr>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Leave Type</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Leave Duration</th>
-                    <th>Reason</th>
-                    <th>Status</th>
+                    <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+                    <td><%= leave_application.user.name %></td>
+                    <td><%= leave_application.leave_type.name %></td>
+                    <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+                    <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+                    <td><%= leave_application.leave_duration %></td>
+                    <td><%= leave_application.reason %></td>
+                    <td><%= leave_application.status %></td>
                   </tr>
-                </thead>
-
-                <tbody>
-                  <% @leave_applications.each do |leave_application| %>
-                    <% if leave_application.user_id != current_user.id %>
-                      <tr>
-                        <td><%= leave_application.created_at.strftime('%d/%m') %></td>
-                        <td><%= leave_application.user.name %></td>
-                        <td><%= leave_application.leave_type.name %></td>
-                        <td><%= leave_application.start_date.strftime('%d/%m') %></td>
-                        <td><%= leave_application.end_date.strftime('%d/%m') %></td>
-                        <td><%= leave_application.leave_duration %></td>
-                        <td><%= leave_application.reason %></td>
-                        <td><%= leave_application.status %></td>
-                      </tr>
-                    <% end %>
-                  <% end %>
-                </tbody>
-              </table>
-            <% end %>
-          </div>
-        </div>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+</div>

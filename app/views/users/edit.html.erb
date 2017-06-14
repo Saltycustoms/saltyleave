@@ -1,60 +1,30 @@
-<html>
-  <head>
-  </head>
-
-  <body>
-    <header>
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Saltyleave</li>
-            <li class="menu-text">Current User: <%= current_user.name %></li>
-          </ul>
-        </div>
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li><%=link_to "View Leave Applications", leave_applications_path %></li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_any_of? :head, :director, :admin %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
-              <li><a href="/users">View Users</a></li>
-              <li><a href="/leave_types/new">Add Leave Type</a></li>
-            <% end %>
-            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
-          </ul>
-        </div>
+<div class="row">
+  <div class="large-6 large-offset-3 columns">
+    <% if @user.errors.any? %>
+      <div class="callout alert" id="error_explanation">
+        <h4>
+          <%= pluralize(@user.errors.count, "error") %> prohibited this application from being saved:
+        </h4>
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
       </div>
-    </header>
+    <% end %>
+
+    <%= simple_form_for @user do |f| %>
+      <td><%= f.input :name %></td>
+      <td><%= f.input :department, collection: User.departments.keys, include_blank: false %></td>
+      <td><%= f.input :region, collection: User.regions.keys, include_blank: false %></td>
+      <td><%= f.input :roles, collection: User.valid_roles, as: :check_boxes %></td>
+      <td><%= f.input :email %></td>
+      <td><%= f.input :annual_days, as: :integer %></td>
+      <td><%= f.input :sick_days, as: :integer %></td>
+      <td><%= f.input :unpaid_days, as: :integer %></td>
+      <td><%= f.submit %></td>
+    <% end %>
     <br>
-    <div class="row">
-      <div class="large-6 large-offset-3 columns">
-        <% if @user.errors.any? %>
-          <div class="callout alert" id="error_explanation">
-            <h4>
-              <%= pluralize(@user.errors.count, "error") %> prohibited this application from being saved:
-            </h4>
-            <ul>
-              <% @user.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-              <% end %>
-            </ul>
-          </div>
-        <% end %>
-
-        <%= simple_form_for @user do |f| %>
-          <td><%= f.input :name %></td>
-          <td><%= f.input :department, collection: User.departments.keys, include_blank: false %></td>
-          <td><%= f.input :region, collection: User.regions.keys, include_blank: false %></td>
-          <td><%= f.input :roles, collection: User.valid_roles, as: :check_boxes %></td>
-          <td><%= f.input :email %></td>
-          <td><%= f.input :annual_days, as: :integer %></td>
-          <td><%= f.input :sick_days, as: :integer %></td>
-          <td><%= f.input :unpaid_days, as: :integer %></td>
-          <td><%= f.submit %></td>
-        <% end %>
-        <br>
-        <a href="/users" class="button">Back</a>
-      </div>
-    </div>
-  </body>
-</html>
+    <a href="/users" class="button">Back</a>
+  </div>
+</div>

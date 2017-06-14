@@ -1,41 +1,10 @@
-<html>
-  <head>
-  </head>
+<div class="row">
+  <div class="large-6 large-offset-3 columns">
 
-  <body>
-    <header>
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Saltyleave</li>
-            <li class="menu-text">Current User: <%= current_user.name %></li>
-          </ul>
-        </div>
+    <%= simple_form_for :leave_type do |f| %>
+      <%= f.input :name, placeholder: 'e.g. Annual, Sick' %>
+      <%= f.button :submit %>
+    <% end %>
 
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li><a href="/leave_applications">View Leave Applications</a></li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_any_of? :head, :diretor, :admin %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
-              <li><a href="/users">View Users</a></li>
-              <li class="menu-text">Add Leave Type</li>
-            <% end %>
-            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
-          </ul>
-        </div>
-      </div>
-    </header>
-    <br>
-    <div class="row">
-      <div class="large-6 large-offset-3 columns">
-
-        <%= simple_form_for :leave_type do |f| %>
-          <%= f.input :name, placeholder: 'e.g. Annual, Sick' %>
-          <%= f.button :submit %>
-        <% end %>
-
-      </div>
-    </div>
-  </body>
-</html>
+  </div>
+</div>

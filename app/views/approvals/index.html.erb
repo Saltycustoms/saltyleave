@@ -1,95 +1,64 @@
-<html>
-  <head>
-  </head>
-
-  <body>
-    <header>
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Saltyleave</li>
-            <li class="menu-text">Current User: <%= current_user.name %></li>
-          </ul>
-        </div>
-
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li><a href="/leave_applications">View Leave Applications</a></li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_any_of? :head, :diretor, :admin %>
-              <li class="menu-text">Approve Leave Applications</li>
-              <li><a href="/users">View Users</a></li>
-              <li><a href="/leave_types/new">Add Leave Type</a></li>
-            <% end %>
-            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
-          </ul>
-        </div>
-      </div>
-    </header>
-    <br>
-    <div class="row">
-      <%= search_form_for @q, url: approvals_path do |f| %>
-        <div class="large-3 large-offset-1 columns">
-          <%= f.label :start_date_start %>
-          <%= f.search_field :start_date_start %>
-        </div>
-        <div class="large-3 columns">
-          <%= f.label :end_date_start %>
-          <%= f.search_field :end_date_start %>
-        </div>
-        <div class="large-3 columns">
-          <%= f.label :user_name_cont %>
-          <%= f.search_field :user_name_cont %>
-        </div>
-        <div class="large-1 columns">
-          <%= f.submit %>
-        </div>
-      <% end %>
+<div class="row">
+  <%= search_form_for @q, url: approvals_path do |f| %>
+    <div class="large-3 large-offset-1 columns">
+      <%= f.label :start_date_start %>
+      <%= f.search_field :start_date_start %>
     </div>
+    <div class="large-3 columns">
+      <%= f.label :end_date_start %>
+      <%= f.search_field :end_date_start %>
+    </div>
+    <div class="large-3 columns">
+      <%= f.label :user_name_cont %>
+      <%= f.search_field :user_name_cont %>
+    </div>
+    <div class="large-1 columns">
+      <%= f.submit %>
+    </div>
+  <% end %>
+</div>
 
-    <div class="row">
-      <div class="large-12 columns">
-        <table>
-          <thead>
+<div class="row">
+  <div class="large-12 columns">
+    <table>
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
+          <th><%= sort_link(@q, :user_name, 'Name') %></th>
+          <% if current_user.is? :director %>
+            <th><%= sort_link(@q, :user_department, 'Department') %></th>
+          <% end %>
+          <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
+          <th><%= sort_link(@q, :start_date, 'Start Date') %></th>
+          <th><%= sort_link(@q, :end_date, 'End Date') %></th>
+          <th><%= sort_link(@q, :leave_duration, 'Leave Duration') %></th>
+          <th><%= sort_link(@q, :reason, 'Reason') %></th>
+          <th><%= sort_link(@q, :attachment, 'Attachment') %></th>
+          <th><%= sort_link(@q, :status, 'Status') %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @leave_applications.each do |leave_application| %>
+          <% if leave_application.user.id != current_user.id %>
             <tr>
-              <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
-              <th><%= sort_link(@q, :user_name, 'Name') %></th>
+              <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+              <td><%= leave_application.user.name %></td>
               <% if current_user.is? :director %>
-                <th><%= sort_link(@q, :user_department, 'Department') %></th>
+                <td><%= leave_application.user.department %></td>
               <% end %>
-              <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
-              <th><%= sort_link(@q, :start_date, 'Start Date') %></th>
-              <th><%= sort_link(@q, :end_date, 'End Date') %></th>
-              <th><%= sort_link(@q, :leave_duration, 'Leave Duration') %></th>
-              <th><%= sort_link(@q, :reason, 'Reason') %></th>
-              <th><%= sort_link(@q, :attachment, 'Attachment') %></th>
-              <th><%= sort_link(@q, :status, 'Status') %></th>
+              <td><%= leave_application.leave_type.name %></td>
+              <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+              <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+              <td><%= leave_application.leave_duration %></td>
+              <td><%= leave_application.reason %></td>
+              <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
+              <td><%= leave_application.status %></td>
+              <td><%= link_to 'Edit', edit_leave_application_path(leave_application.id) %></td>
             </tr>
-          </thead>
-
-          <tbody>
-            <% @leave_applications.each do |leave_application| %>
-              <% if leave_application.user.id != current_user.id %>
-                <tr>
-                  <td><%= leave_application.created_at.strftime('%d/%m') %></td>
-                  <td><%= leave_application.user.name %></td>
-                  <% if current_user.is? :director %>
-                    <td><%= leave_application.user.department %></td>
-                  <% end %>
-                  <td><%= leave_application.leave_type.name %></td>
-                  <td><%= leave_application.start_date.strftime('%d/%m') %></td>
-                  <td><%= leave_application.end_date.strftime('%d/%m') %></td>
-                  <td><%= leave_application.leave_duration %></td>
-                  <td><%= leave_application.reason %></td>
-                  <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
-                  <td><%= leave_application.status %></td>
-                  <td><%= link_to 'Edit', edit_leave_application_path(leave_application.id) %></td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </body>
-</html>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

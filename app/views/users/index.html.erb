@@ -1,75 +1,44 @@
-<html>
-  <head>
-  </head>
+<div class="row">
+  <div class="large-10 large-offset-1 columns">
+    <table>
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :id, 'ID') %></th>
+          <th><%= sort_link(@q, :name, 'Name') %></th>
+          <% if current_user.is_director? %>
+            <th><%= sort_link(@q, :department, [:department, 'name asc'], 'Department') %></th>
+          <% end %>
+          <th><%= sort_link(@q, :region, [:region, 'name asc'], 'Region') %></th>
+          <th><%= sort_link(@q, :email, 'Email') %></th>
+          <th><%= sort_link(@q, :annual_days, [:annual_days, 'name asc'], 'Annual Leave Days')%></th>
+          <th><%= sort_link(@q, :sick_days, [:sick_days, 'name asc'], 'Sick Leave Days')%></th>
+          <th><%= sort_link(@q, :unpaid_days, [:unpaid_days, 'name asc'], 'Unpaid Leave Days')%></th>
+          <th><%= sort_link(@q, :roles_mask, 'Role(s)') %></th>
+        </tr>
+      </thead>
 
-  <body>
-    <header>
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Saltyleave</li>
-            <li class="menu-text">Current User: <%= current_user.name %></li>
-          </ul>
-        </div>
-
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li><a href="/leave_applications">View Leave Applications</a></li>
-            <li><a href="/leave_applications/new">Apply for Leave</a></li>
-            <% if current_user.is_any_of? :head, :diretor, :admin %>
-              <li><a href="/approvals">Approve Leave Applications</a></li>
-              <li class="menu-text">View Users</li>
-              <li><a href="/leave_types/new">Add Leave Type</a></li>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.id %></td>
+            <td><%= user.name %></td>
+            <% if current_user.is? :director %>
+              <td><%= user.department %></td>
             <% end %>
-            <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
-          </ul>
-        </div>
-      </div>
-    </header>
-    <br>
-    <div class="row">
-      <div class="large-10 large-offset-1 columns">
-        <table>
-          <thead>
-            <tr>
-              <th><%= sort_link(@q, :id, 'ID') %></th>
-              <th><%= sort_link(@q, :name, 'Name') %></th>
-              <% if current_user.is_director? %>
-                <th><%= sort_link(@q, :department, [:department, 'name asc'], 'Department') %></th>
-              <% end %>
-              <th><%= sort_link(@q, :region, [:region, 'name asc'], 'Region') %></th>
-              <th><%= sort_link(@q, :email, 'Email') %></th>
-              <th><%= sort_link(@q, :annual_days, [:annual_days, 'name asc'], 'Annual Leave Days')%></th>
-              <th><%= sort_link(@q, :sick_days, [:sick_days, 'name asc'], 'Sick Leave Days')%></th>
-              <th><%= sort_link(@q, :unpaid_days, [:unpaid_days, 'name asc'], 'Unpaid Leave Days')%></th>
-              <th><%= sort_link(@q, :roles_mask, 'Role(s)') %></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @users.each do |user| %>
-              <tr>
-                <td><%= user.id %></td>
-                <td><%= user.name %></td>
-                <% if current_user.is? :director %>
-                  <td><%= user.department %></td>
-                <% end %>
-                <td><%= user.region %></td>
-                <td><%= user.email %></td>
-                <td><%= user.annual_days %></td>
-                <td><%= user.sick_days %></td>
-                <td><%= user.unpaid_days %></td>
-                <td><%= user.role_symbols %></td>
-                <% if current_user.is? :admin %>
-                  <td><%= link_to 'Edit', edit_user_path(user.id) %></td>
-                <% end %>
-              </tr>
+            <td><%= user.region %></td>
+            <td><%= user.email %></td>
+            <td><%= user.annual_days %></td>
+            <td><%= user.sick_days %></td>
+            <td><%= user.unpaid_days %></td>
+            <td><%= user.role_symbols %></td>
+            <% if current_user.is? :admin %>
+              <td><%= link_to 'Edit', edit_user_path(user.id) %></td>
             <% end %>
-          </tbody>
-        </table>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-        <a href="/users/new" class="button">Add User</a>
-      </div>
-    </div>
-  </body>
-</html>
+    <a href="/users/new" class="button">Add User</a>
+  </div>
+</div>
