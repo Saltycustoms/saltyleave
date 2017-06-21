@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :leave_types
   resources :leave_applications
+  put "leave_applications/:id/:status", to: "leave_applications#update"
   resources :approvals
   resources :users
 

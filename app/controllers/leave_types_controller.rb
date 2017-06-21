@@ -1,4 +1,8 @@
 class LeaveTypesController < ApplicationController
+  def show
+    @leave_type = LeaveType.find(params[:id])
+  end
+
   def new
     @leave_type = LeaveType.new
   end
@@ -15,6 +19,6 @@ class LeaveTypesController < ApplicationController
 
   private
     def leave_type_params
-      params.require(:leave_type).permit(:leave_type)
+      params.require(:leave_type).permit(:name)
     end
 end

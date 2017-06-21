@@ -13,17 +13,8 @@
       </div>
     <% end %>
 
-    <%= simple_form_for @user do |f| %>
-      <td><%= f.input :name %></td>
-      <td><%= f.input :department, collection: User.departments.keys, include_blank: false %></td>
-      <td><%= f.input :region, collection: User.regions.keys, include_blank: false %></td>
-      <td><%= f.input :roles, collection: User.valid_roles, as: :check_boxes %></td>
-      <td><%= f.input :email %></td>
-      <td><%= f.input :annual_days, as: :integer %></td>
-      <td><%= f.input :sick_days, as: :integer %></td>
-      <td><%= f.input :unpaid_days, as: :integer %></td>
-      <td><%= f.submit %></td>
-    <% end %>
+    <%= render "form" %>
+
     <br>
     <a href="/users" class="button">Back</a>
   </div>

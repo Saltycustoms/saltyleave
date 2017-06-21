@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   def index
     @q = User.ransack(params[:q])
 
-    if current_user.is_director?
+    if current_user.is? :director
       @users = @q.result
     else
       @users = @q.result.where(department: current_user.department)
@@ -44,6 +44,6 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:name, :department, :region, :email, :password, roles: [])
+      params.require(:user).permit(:name, :department, :region, :email, :password, roles: [], records_attributes: [:id, :days, :leave_type_id, :_destroy])
     end
 end

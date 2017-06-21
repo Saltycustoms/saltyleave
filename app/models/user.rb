@@ -2,6 +2,9 @@ require 'role_model'
 
 class User < ApplicationRecord
   has_many :leave_applications
+  has_many :records
+  has_many :leave_types, through: :records
+  accepts_nested_attributes_for :records, allow_destroy: true
 
   include RoleModel
   roles_attribute :roles_mask
@@ -9,7 +12,7 @@ class User < ApplicationRecord
 
   enum department: [ :Tech, :Creative, :Sales, :Procurement, :Logistics, :People, :Finance ]
   enum region: [ :Malaysia, :Singapore ]
-  
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,

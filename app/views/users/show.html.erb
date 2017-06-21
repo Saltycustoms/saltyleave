@@ -8,9 +8,9 @@
           <th>Department</th>
           <th>Region</th>
           <th>Email</th>
-          <th>Annual Days</th>
-          <th>Sick Days</th>
-          <th>Unpaid Days</th>
+          <% LeaveType.all.collect do |l| %>
+            <th><%= "#{l.name} Leave Days" %></th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
@@ -20,9 +20,15 @@
           <td><%= @user.department %></td>
           <td><%= @user.region %></td>
           <td><%= @user.email %></td>
-          <td><%= @user.annual_days %></td>
-          <td><%= @user.sick_days %></td>
-          <td><%= @user.unpaid_days %></td>
+          <% LeaveType.all.each do |l| %>
+            <td>
+              <% if @user.records.find_by_leave_type_id(l.id)  %>
+                <%= @user.records.find_by_leave_type_id(l.id).days %>
+              <% else %>
+                <%= "nil" %>
+              <% end %>
+            </td>
+          <% end %>
         </tr>
       </tbody>
     </table>

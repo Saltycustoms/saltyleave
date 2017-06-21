@@ -1,12 +1,12 @@
 <div class="row">
   <div class="columns">
     <ul class="tabs" data-tabs id="index-tabs">
-      <li class="tabs-title is-active"><a href="#calendar">Calendar</a></li>
+      <li class="tabs-title"><a href="#calendar">Calendar</a></li>
       <li class="tabs-title"><a href="#tables">Leave Applications</a></li>
     </ul>
 
     <div class="tabs-content" data-tabs-content="index-tabs">
-      <div class="tabs-panel is-active" id="calendar">
+      <div class="tabs-panel" id="calendar">
         <h4>Calendar</h4>
         <%= month_calendar events: @leaves do |date, leave_applications| %>
           <%= date.mday %>

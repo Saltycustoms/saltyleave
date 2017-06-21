@@ -28,21 +28,15 @@
       </div>
     <% end %>
 
-    <h6>
-      <strong><%= "#{pluralize(current_user.annual_days, 'day')}" %></strong>
-      <%= " of annual leave available" %>
-    </h6>
-    <h6>
-      <strong><%= "#{pluralize(current_user.sick_days, 'day')}" %></strong>
-      <%= " of sick leave available" %>
-    </h6>
-    <h6>
-      <strong><%= "#{pluralize(current_user.unpaid_days, 'day')}" %></strong>
-      <%= " of unpaid leave available" %>
-    </h6>
+    <% current_user.records.each do |r| %>
+      <h6>
+        <strong><%= "#{pluralize(r.days, 'day')}" %></strong>
+        <%= " of #{r.leave_type.name.downcase} leave available" %>
+      </h6>
+    <% end %>
 
     <%= simple_form_for :leave_application, url: leave_applications_path do |f| %>
-      <%= f.input :leave_type_id, collection: LeaveType.all.collect{|type| ["#{type.name}", type.id]}, include_blank: false %>
+      <%= f.input :leave_type_id, collection: current_user.records.collect{|r| ["#{r.leave_type.name}", r.leave_type_id]}, include_blank: false %>
       <%= f.input :start_date, as: :date %>
       <%= f.input :end_date, as: :date %>
       <%= f.input :leave_duration, collection: LeaveApplication.leave_durations.keys, include_blank: false %>

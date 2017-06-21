@@ -24,12 +24,7 @@ class LeaveApplicationsController < ApplicationController
 
   def new
     @leaves = LeaveApplication.where(status: 1)
-
-    if current_user.annual_days > 0 && current_user.sick_days > 0 && current_user.unpaid_days > 0
-      @leave_application = LeaveApplication.new
-    else
-      #Placeholder: Display an error message
-    end
+    @leave_application = LeaveApplication.new
   end
 
   def edit
@@ -39,41 +34,43 @@ class LeaveApplicationsController < ApplicationController
   def create
     @leave_application = current_user.leave_applications.new(leave_application_params)
 
-    if @leave_application.save
-      redirect_to @leave_application
-    else
-      render 'new'
+    duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
+    type = @leave_application.leave_type_id
+
+    if @leave_application.user.records.find_by_leave_type_id(type).days >= duration
+      if @leave_application.save
+        redirect_to @leave_application
+      else
+        @leaves = LeaveApplication.where(status: 1)
+        render 'new'
+      end
     end
   end
 
   def update
     @leave_application = LeaveApplication.find(params[:id])
+    @leave_application.update_attribute(:status, params[:status].to_i)
 
-    if @leave_application.update(leave_application_params)
-      if @leave_application.approved?
-        duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
-
-        case @leave_application.leave_type_id
-        when 1
-          @leave_application.user.annual_days -= duration
-        when 2
-          @leave_application.user.sick_days -= duration
-        when 3
-          @leave_application.user.unpaid_days -= duration
-        end
-      end
-      @leave_application.user.save
-      redirect_to @leave_application
-    else
-      render 'edit'
+    if @leave_application.approved?
+      duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
+      type = @leave_application.leave_type_id
+      @leave_application.user.records.find_by_leave_type_id(type).days -= duration
     end
+
+    redirect_to approvals_path
   end
 
   def destroy
     @leave_application = LeaveApplication.find(params[:id])
     @leave_application.destroy
 
-    redirect_to leave_applications_path
+    if @leave_application.approved?
+      duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
+      type = @leave_application.leave_type_id
+      @leave_application.user.records.find_by_leave_type_id(type).days += duration
+    end
+
+    redirect_back(fallback_location: root_path)
   end
 
   private

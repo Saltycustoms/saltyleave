@@ -26,7 +26,7 @@
             <ul class="menu">
               <li><a href="/leave_applications">View Leave Applications</a></li>
               <li><a href="/leave_applications/new">Apply for Leave</a></li>
-              <% if current_user.is_any_of? :head, :diretor, :admin %>
+              <% if current_user.is_any_of? :head, :director, :admin %>
                 <li><a href="/approvals">Approve Leave Applications</a></li>
                 <li><a href="/users">View Users</a></li>
                 <li><a href="/leave_types/new">Add Leave Type</a></li>

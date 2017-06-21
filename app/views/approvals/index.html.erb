@@ -40,7 +40,7 @@
 
       <tbody>
         <% @leave_applications.each do |leave_application| %>
-          <% if leave_application.user.id != current_user.id %>
+          <% if (leave_application.user.id != current_user.id) && leave_application.pending? %>
             <tr>
               <td><%= leave_application.created_at.strftime('%d/%m') %></td>
               <td><%= leave_application.user.name %></td>
@@ -54,7 +54,96 @@
               <td><%= leave_application.reason %></td>
               <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
               <td><%= leave_application.status %></td>
-              <td><%= link_to 'Edit', edit_leave_application_path(leave_application.id) %></td>
+              <td>
+                <%= button_to 'Approve', leave_application_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:approved] }, data: { confirm: 'Are you sure?' } %>
+              </td>
+              <td>
+                <%= button_to 'Reject', leave_application_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:rejected] }, data: { confirm: 'Are you sure?' } %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="large-12 columns">
+    <table>
+      <caption>Approved Leave Applications</caption>
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
+          <th><%= sort_link(@q, :user_name, 'Name') %></th>
+          <% if current_user.is? :director %>
+            <th><%= sort_link(@q, :user_department, 'Department') %></th>
+          <% end %>
+          <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
+          <th><%= sort_link(@q, :start_date, 'Start Date') %></th>
+          <th><%= sort_link(@q, :end_date, 'End Date') %></th>
+          <th><%= sort_link(@q, :leave_duration, 'Leave Duration') %></th>
+          <th><%= sort_link(@q, :reason, 'Reason') %></th>
+          <th><%= sort_link(@q, :attachment, 'Attachment') %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @leave_applications.each do |leave_application| %>
+          <% if leave_application.user.id != current_user.id && leave_application.approved? %>
+            <tr>
+              <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+              <td><%= leave_application.user.name %></td>
+              <% if current_user.is? :director %>
+                <td><%= leave_application.user.department %></td>
+              <% end %>
+              <td><%= leave_application.leave_type.name %></td>
+              <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+              <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+              <td><%= leave_application.leave_duration %></td>
+              <td><%= leave_application.reason %></td>
+              <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
+              <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="large-12 columns">
+    <table>
+      <caption>Rejected Leave Applications</caption>
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
+          <th><%= sort_link(@q, :user_name, 'Name') %></th>
+          <% if current_user.is? :director %>
+            <th><%= sort_link(@q, :user_department, 'Department') %></th>
+          <% end %>
+          <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
+          <th><%= sort_link(@q, :start_date, 'Start Date') %></th>
+          <th><%= sort_link(@q, :end_date, 'End Date') %></th>
+          <th><%= sort_link(@q, :leave_duration, 'Leave Duration') %></th>
+          <th><%= sort_link(@q, :reason, 'Reason') %></th>
+          <th><%= sort_link(@q, :attachment, 'Attachment') %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @leave_applications.each do |leave_application| %>
+          <% if leave_application.user.id != current_user.id && leave_application.rejected? %>
+            <tr>
+              <td><%= leave_application.created_at.strftime('%d/%m') %></td>
+              <td><%= leave_application.user.name %></td>
+              <% if current_user.is? :director %>
+                <td><%= leave_application.user.department %></td>
+              <% end %>
+              <td><%= leave_application.leave_type.name %></td>
+              <td><%= leave_application.start_date.strftime('%d/%m') %></td>
+              <td><%= leave_application.end_date.strftime('%d/%m') %></td>
+              <td><%= leave_application.leave_duration %></td>
+              <td><%= leave_application.reason %></td>
+              <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
+              <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
             </tr>
           <% end %>
         <% end %>

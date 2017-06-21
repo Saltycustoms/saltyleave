@@ -39,6 +39,8 @@ gem 'ransack'
 gem 'carrierwave', '~> 1.0'
 gem 'foundation-rails'
 gem 'role_model'
+gem 'cocoon'
+gem 'nested_form'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

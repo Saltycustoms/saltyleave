@@ -13,17 +13,6 @@
       </div>
     <% end %>
 
-    <%= simple_form_for :user, url: users_path do |f| %>
-      <%= f.input :name %>
-      <%= f.input :department, collection: User.departments.keys, include_blank: false %>
-      <%= f.input :region, collection: User.regions.keys, include_blank: false, as: :radio_buttons %>
-      <%= f.input :roles, collection: User.valid_roles, as: :check_boxes %>
-      <%= f.input :annual_days, as: :integer, placeholder: '14' %>
-      <%= f.input :sick_days, as: :integer, placeholder: '28' %>
-      <%= f.input :unpaid_days, as: :integer, placeholder: '28' %>
-      <%= f.input :email %>
-      <%= f.input :password %>
-      <%= f.button :submit %>
-    <% end %>
+    <%= render "form" %>
   </div>
 </div>
