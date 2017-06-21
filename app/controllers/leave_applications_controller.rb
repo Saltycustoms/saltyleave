@@ -54,7 +54,9 @@ class LeaveApplicationsController < ApplicationController
     if @leave_application.approved?
       duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
       type = @leave_application.leave_type_id
-      @leave_application.user.records.find_by_leave_type_id(type).days -= duration
+      @record = @leave_application.user.records.find_by_leave_type_id(type)
+      @record.days -= duration
+      @record.save
     end
 
     redirect_to approvals_path
@@ -67,7 +69,9 @@ class LeaveApplicationsController < ApplicationController
     if @leave_application.approved?
       duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
       type = @leave_application.leave_type_id
-      @leave_application.user.records.find_by_leave_type_id(type).days += duration
+      @record = @leave_application.user.records.find_by_leave_type_id(type)
+      @record.days += duration
+      @record.save
     end
 
     redirect_back(fallback_location: root_path)

@@ -17,8 +17,7 @@ class LeaveApplication < ApplicationRecord
 
   def valid_length
     duration = start_date.business_days_until(end_date) + 1
-    type = leave_type
-    count = user.records.find_by_leave_type_id(type).days
+    count = user.records.find_by_leave_type_id(leave_type).days
 
     if duration > count
       errors.add(:end_date, " test")
