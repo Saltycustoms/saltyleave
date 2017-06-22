@@ -20,7 +20,7 @@ class LeaveApplication < ApplicationRecord
     count = user.records.find_by_leave_type_id(leave_type).days
 
     if duration > count
-      errors.add(:remaining_leave_days, "insufficient")
+      errors.add(:remaining_leave_days, " insufficient")
     end
   end
 

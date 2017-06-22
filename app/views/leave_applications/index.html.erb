@@ -13,7 +13,7 @@
 
           <% if !date.saturday? && !date.sunday? %>
             <% leave_applications.each do |leave_application| %>
-              <div>
+              <div id="leave_taker">
                 <%= leave_application.user.name %>
               </div>
             <% end %>
