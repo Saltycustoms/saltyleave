@@ -3,9 +3,9 @@ class UsersController < ApplicationController
     @q = User.ransack(params[:q])
 
     if current_user.is? :director
-      @users = @q.result
+      @users = @q.result.includes(:records).uniq
     else
-      @users = @q.result.where(department: current_user.department)
+      @users = @q.result.where(department: current_user.department).includes(:records).uniq
     end
   end
 

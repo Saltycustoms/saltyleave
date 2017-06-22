@@ -11,7 +11,7 @@
           <th><%= sort_link(@q, :region, [:region, 'name asc'], 'Region') %></th>
           <th><%= sort_link(@q, :email, 'Email') %></th>
           <% LeaveType.all.collect do |l| %>
-            <th><%= "#{l.name} Leave Days" %></th>
+            <th><%= sort_link(@q, :records_days, "#{l.name} Leave Days") %></th>
           <% end %>
           <th><%= sort_link(@q, :roles_mask, 'Role(s)') %></th>
         </tr>
