@@ -34,16 +34,11 @@ class LeaveApplicationsController < ApplicationController
   def create
     @leave_application = current_user.leave_applications.new(leave_application_params)
 
-    duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
-    type = @leave_application.leave_type_id
-
-    if @leave_application.user.records.find_by_leave_type_id(type).days >= duration
-      if @leave_application.save
-        redirect_to @leave_application
-      else
-        @leaves = LeaveApplication.where(status: 1)
-        render 'new'
-      end
+    if @leave_application.save
+      redirect_to @leave_application
+    else
+      @leaves = LeaveApplication.where(status: 1)
+      render :new
     end
   end
 
