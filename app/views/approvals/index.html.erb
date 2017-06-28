@@ -25,7 +25,7 @@
         <tr>
           <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
           <th><%= sort_link(@q, :user_name, 'Name') %></th>
-          <% if current_user.is? :director %>
+          <% if current_user.is_any_of? :director, :admin %>
             <th><%= sort_link(@q, :user_department, 'Department') %></th>
           <% end %>
           <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
@@ -44,7 +44,7 @@
             <tr>
               <td><%= leave_application.created_at.strftime('%d/%m') %></td>
               <td><%= leave_application.user.name %></td>
-              <% if current_user.is? :director %>
+              <% if current_user.is_any_of? :director, :admin %>
                 <td><%= leave_application.user.department %></td>
               <% end %>
               <td><%= leave_application.leave_type.name %></td>
@@ -74,7 +74,7 @@
         <tr>
           <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
           <th><%= sort_link(@q, :user_name, 'Name') %></th>
-          <% if current_user.is? :director %>
+          <% if current_user.is_any_of? :director, :admin %>
             <th><%= sort_link(@q, :user_department, 'Department') %></th>
           <% end %>
           <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
@@ -92,7 +92,7 @@
             <tr>
               <td><%= leave_application.created_at.strftime('%d/%m') %></td>
               <td><%= leave_application.user.name %></td>
-              <% if current_user.is? :director %>
+              <% if current_user.is_any_of? :director, :admin %>
                 <td><%= leave_application.user.department %></td>
               <% end %>
               <td><%= leave_application.leave_type.name %></td>
@@ -116,7 +116,7 @@
         <tr>
           <th><%= sort_link(@q, :created_at, 'Submitted On') %></th>
           <th><%= sort_link(@q, :user_name, 'Name') %></th>
-          <% if current_user.is? :director %>
+          <% if current_user.is_any_of? :director, :admin %>
             <th><%= sort_link(@q, :user_department, 'Department') %></th>
           <% end %>
           <th><%= sort_link(@q, :leave_type, 'Leave Type') %></th>
@@ -134,7 +134,7 @@
             <tr>
               <td><%= leave_application.created_at.strftime('%d/%m') %></td>
               <td><%= leave_application.user.name %></td>
-              <% if current_user.is? :director %>
+              <% if current_user.is_any_of? :director, :admin %>
                 <td><%= leave_application.user.department %></td>
               <% end %>
               <td><%= leave_application.leave_type.name %></td>

@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   def index
     @q = User.ransack(params[:q])
 
-    if current_user.is? :director
+    if current_user.is_any_of? :director, :admin
       @users = @q.result.includes(:records).uniq
     else
       @users = @q.result.where(department: current_user.department).includes(:records).uniq

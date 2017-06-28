@@ -5,7 +5,7 @@
         <tr>
           <th><%= sort_link(@q, :id, 'ID') %></th>
           <th><%= sort_link(@q, :name, 'Name') %></th>
-          <% if current_user.is_director? %>
+          <% if current_user.is_any_of? :director, :admin %>
             <th><%= sort_link(@q, :department, [:department, 'name asc'], 'Department') %></th>
           <% end %>
           <th><%= sort_link(@q, :region, [:region, 'name asc'], 'Region') %></th>
@@ -22,7 +22,7 @@
           <tr>
             <td><%= user.id %></td>
             <td><%= user.name %></td>
-            <% if current_user.is? :director %>
+            <% if current_user.is_any_of? :director, :admin %>
               <td><%= user.department %></td>
             <% end %>
             <td><%= user.region %></td>
