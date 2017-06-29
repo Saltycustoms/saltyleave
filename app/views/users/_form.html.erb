@@ -1,10 +1,10 @@
 <%= simple_nested_form_for @user do |f| %>
-  <%= f.input :name %>
+  <%= f.input :name, error: false %>
   <%= f.input :department, collection: User.departments.keys %>
-  <%= f.input :region, collection: User.regions.keys, include_blank: false, as: :radio_buttons %>
+  <%= f.input :region, collection: User.regions.keys, include_blank: false, as: :radio_buttons, error: false %>
   <%= f.input :roles, collection: User.valid_roles, as: :check_boxes %>
-  <%= f.input :email %>
-  <%= f.input :password %>
+  <%= f.input :email, error: false %>
+  <%= f.input :password, error: false %>
 
   <%= f.link_to_add "Add leave type", :records %>
   <%= f.simple_fields_for :records do |r| %>

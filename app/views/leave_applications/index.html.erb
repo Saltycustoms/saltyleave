@@ -13,7 +13,7 @@
 
           <% if !date.saturday? && !date.sunday? %>
             <% leave_applications.each do |leave_application| %>
-              <div id="leave_taker">
+              <div>
                 <%= leave_application.user.name %>
               </div>
             <% end %>
@@ -47,6 +47,7 @@
                   <td><%= leave_application.reason %></td>
                   <td><%= leave_application.status %></td>
                   <% if leave_application.status == "pending" %>
+                    <td><%= link_to 'Edit', edit_leave_application_path(leave_application) %></td>
                     <td><%= link_to 'Destroy', leave_application_path(leave_application), method: :delete, data: { confirm: 'Are you sure?' } %></td>
                   <% end %>
                 </tr>

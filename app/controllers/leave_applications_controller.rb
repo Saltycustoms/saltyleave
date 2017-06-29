@@ -28,6 +28,7 @@ class LeaveApplicationsController < ApplicationController
   end
 
   def edit
+    @leaves = LeaveApplication.where(status: 1)
     @leave_application = LeaveApplication.find(params[:id])
   end
 

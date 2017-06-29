@@ -6,6 +6,11 @@ class User < ApplicationRecord
   has_many :leave_types, through: :records
   accepts_nested_attributes_for :records, allow_destroy: true
 
+  validates :name, presence: true
+  validates :email, presence: true
+  validates :password, presence: true
+  validates :region, presence: true
+
   include RoleModel
   roles_attribute :roles_mask
   roles :employee, :head, :director, :admin
