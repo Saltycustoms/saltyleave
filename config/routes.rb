@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   get 'login/index'
-  get 'leave_types/index'
   get '/download/:id', to: 'leave_applications#download', as: 'download'
   devise_for :users
 
