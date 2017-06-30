@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to @user
     else
-      render 'new'
+      render :new
     end
   end
 
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
       @user.save
       redirect_to @user
     else
-      render 'edit'
+      render :edit
     end
   end
 

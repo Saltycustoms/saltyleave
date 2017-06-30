@@ -45,6 +45,17 @@ class LeaveApplicationsController < ApplicationController
 
   def update
     @leave_application = LeaveApplication.find(params[:id])
+
+    if @leave_application.update(leave_application_params)
+      @leave_application.save
+      redirect_to @leave_application
+    else
+      render :edit
+    end
+  end
+
+  def review
+    @leave_application = LeaveApplication.find(params[:id])
     @leave_application.update_attribute(:status, params[:status].to_i)
 
     if @leave_application.approved?

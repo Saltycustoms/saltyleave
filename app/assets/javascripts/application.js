@@ -18,4 +18,6 @@
 //= require cocoon
 //= require jquery_nested_form
 
-$(function(){ $(document).foundation(); });
+$(document).on("turbolinks:load", function() {
+  $(function(){ $(document).foundation(); });
+});

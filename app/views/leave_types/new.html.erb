@@ -14,7 +14,7 @@
     <% end %>
 
     <%= simple_form_for @leave_type do |f| %>
-      <%= f.input :name, placeholder: 'e.g. Annual, Sick' %>
+      <%= f.input :name, placeholder: 'e.g. Annual, Sick', error: false %>
       <%= f.button :submit %>
     <% end %>
   </div>

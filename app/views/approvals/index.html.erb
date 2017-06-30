@@ -55,10 +55,10 @@
               <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
               <td><%= leave_application.status %></td>
               <td>
-                <%= button_to 'Approve', leave_application_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:approved] }, data: { confirm: 'Are you sure?' } %>
+                <%= button_to 'Approve', review_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:approved] }, data: { confirm: 'Are you sure?' } %>
               </td>
               <td>
-                <%= button_to 'Reject', leave_application_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:rejected] }, data: { confirm: 'Are you sure?' } %>
+                <%= button_to 'Reject', review_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:rejected] }, data: { confirm: 'Are you sure?' } %>
               </td>
             </tr>
           <% end %>
