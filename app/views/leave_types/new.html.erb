@@ -15,7 +15,7 @@
 
     <%= simple_form_for @leave_type do |f| %>
       <%= f.input :name, placeholder: 'e.g. Annual, Sick', error: false %>
-      <%= f.button :submit %>
+      <%= f.button :submit, "Create Leave Type", class: "button" %>
     <% end %>
   </div>
 </div>

@@ -7,18 +7,7 @@
 
     <div class="tabs-content" data-tabs-content="index-tabs">
       <div class="tabs-panel is-active" id="calendar">
-        <h4>Calendar</h4>
-        <%= month_calendar events: @leaves do |date, leave_applications| %>
-          <%= date.mday %>
-
-          <% if !date.saturday? && !date.sunday? %>
-            <% leave_applications.each do |leave_application| %>
-              <div>
-                <%= leave_application.user.name %>
-              </div>
-            <% end %>
-          <% end %>
-        <% end %>
+        <%= render "calendar" %>
       </div>
       <div class="tabs-panel" id="tables">
         <table>

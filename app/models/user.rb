@@ -2,7 +2,7 @@ require 'role_model'
 
 class User < ApplicationRecord
   has_many :leave_applications
-  has_many :records
+  has_many :records, dependent: :destroy
   has_many :leave_types, through: :records
   accepts_nested_attributes_for :records, allow_destroy: true
 

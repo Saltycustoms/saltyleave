@@ -12,8 +12,9 @@
       <%= f.label :user_name_cont %>
       <%= f.search_field :user_name_cont %>
     </div>
+    <br>
     <div class="large-1 columns">
-      <%= f.submit %>
+      <%= f.button :Search, class: "button" %>
     </div>
   <% end %>
 </div>
@@ -55,10 +56,10 @@
               <td><%= link_to 'Download', download_path(leave_application.id) if leave_application.attachment.present? %></td>
               <td><%= leave_application.status %></td>
               <td>
-                <%= button_to 'Approve', review_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:approved] }, data: { confirm: 'Are you sure?' } %>
+                <%= button_to 'Approve', review_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:approved] }, data: { confirm: 'Are you sure?' }, class: "success button"%>
               </td>
               <td>
-                <%= button_to 'Reject', review_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:rejected] }, data: { confirm: 'Are you sure?' } %>
+                <%= button_to 'Reject', review_path(leave_application), method: :put, params: { status: LeaveApplication.statuses[:rejected] }, data: { confirm: 'Are you sure?' }, class: "alert button" %>
               </td>
             </tr>
           <% end %>

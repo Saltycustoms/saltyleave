@@ -6,12 +6,15 @@
   <%= f.input :email, error: false %>
   <%= f.input :password, error: false %>
 
-  <%= f.link_to_add "Add leave type", :records %>
-  <%= f.simple_fields_for :records do |r| %>
-    <%= r.input :leave_type_id, label: 'Leave Types', collection: LeaveType.all.collect{|l| [l.name, l.id]}, include_blank: false %>
-    <%= r.input :days, as: :integer, placeholder: 14 %>
-    <%= r.link_to_remove "Remove"%>
-  <% end %>
+  <div class="callout">
+    <h5>Assign Leave Types</h5>
+    <%= f.link_to_add "Add Leave Type", :records %>
+    <%= f.simple_fields_for :records do |r| %>
+      <%= r.input :leave_type_id, label: 'Leave Types', collection: LeaveType.all.collect{|l| [l.name, l.id]}, include_blank: false %>
+      <%= r.input :days, as: :integer, placeholder: 14 %>
+      <%= r.link_to_remove "Remove"%>
+    <% end %>
+  </div>
 
-  <%= f.button :submit %>
+  <%= f.button :submit, "Save User", class: "button" %>
 <% end %>

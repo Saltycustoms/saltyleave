@@ -16,6 +16,11 @@
 
  */
 
+.date.required {
+  display: inline-block;
+  width: auto;
+}
+
 .simple-calendar {
   table {
     -webkit-border-horizontal-spacing: 0px;
@@ -81,10 +86,20 @@
   .start-date {}
 
   .prev-month {
-    background: #DDD;
+    background: #FFFFFF;
+    color: #C6C6C6;
+
+    &.has-events div {
+      background: #0D7C30;
+    }
   }
   .next-month {
-    background: #DDD;
+    background: #FFFFFF;
+    color: #C6C6C6;
+
+    &.has-events div {
+      background: #0D7C30;
+    }
   }
   .current-month {}
 
