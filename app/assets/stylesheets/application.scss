@@ -85,6 +85,18 @@
 
   .start-date {}
 
+  .has-events div {
+    vertical-align: top;
+    padding: 2px;
+    border-radius: 5px;
+    margin-bottom: 2px;
+  }
+
+  .current-month {
+    &.has-events div {
+      background-color: #06DC30;
+    }
+  }
   .prev-month {
     background: #FFFFFF;
     color: #C6C6C6;
@@ -100,11 +112,6 @@
     &.has-events div {
       background: #0D7C30;
     }
-  }
-  .current-month {}
-
-  .has-events div {
-    background-color: #06DC30;
   }
 
   .today {
