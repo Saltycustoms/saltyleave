@@ -12,6 +12,7 @@
  *
  *= require_tree .
  *= require_self
+ *= require fullcalendar
 //= require foundation_and_overrides
 
  */
@@ -21,6 +22,7 @@
   width: auto;
 }
 
+//Not used in FullCalendar
 .simple-calendar {
   table {
     -webkit-border-horizontal-spacing: 0px;

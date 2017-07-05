@@ -41,6 +41,8 @@ gem 'foundation-rails'
 gem 'role_model'
 gem 'cocoon'
 gem 'nested_form'
+gem 'fullcalendar-rails'
+gem 'momentjs-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

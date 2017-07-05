@@ -37,4 +37,8 @@ class LeaveApplication < ApplicationRecord
   def end_time
     self.end_date
   end
+
+  def title
+    user.name
+  end
 end
