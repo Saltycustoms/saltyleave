@@ -1,14 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Saltyleave</title>
-    <%= csrf_meta_tags %>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
+
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
   </head>
 
   <body>
+    <header>
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li class="menu-text">Saltyleave</li>
+            <li class="menu-text"><%= user_signed_in? ? "Current User: #{current_user.name}" : 'Log In' %></li>
+          </ul>
+        </div>
+
+        <% if user_signed_in? %>
+          <div class="top-bar-right">
+            <ul class="menu">
+              <li><a href="/leave_applications">View Leave Applications</a></li>
+              <li><a href="/leave_applications/new">Apply for Leave</a></li>
+              <% if current_user.is_any_of? :head, :director, :admin %>
+                <li><a href="/approvals">Approve Leave Applications</a></li>
+                <li><a href="/users">View Users</a></li>
+                <li><a href="/leave_types/new">Add Leave Type</a></li>
+              <% end %>
+              <li><a href="/users/sign_out" data-method="delete" class="alert button">Log Out</a></li>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    </header>
+    <br>
+
     <%= yield %>
   </body>
 </html>

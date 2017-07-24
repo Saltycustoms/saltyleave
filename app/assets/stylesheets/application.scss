@@ -12,5 +12,19 @@
  *
  *= require_tree .
  *= require_self
+ *= require fullcalendar
+//= require foundation_and_overrides
+
  */
-@import "bootstrap";
+
+//  Used to fix issues between Foundation and Fullcalendar.
+#calendar {
+  table {
+    background-color: transparent;
+    margin-bottom: 0;
+  }
+
+  tr, tr.fc-minor, thead, tbody {
+    background: transparent;
+  }
+}

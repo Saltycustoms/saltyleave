@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170525091511) do
+ActiveRecord::Schema.define(version: 20170615040328) do
 
   create_table "leave_applications", force: :cascade do |t|
-    t.integer  "leave_type"
+    t.integer  "leave_type_id"
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "leave_duration"
@@ -23,6 +23,20 @@ ActiveRecord::Schema.define(version: 20170525091511) do
     t.integer  "status",         default: 0
     t.integer  "user_id"
     t.string   "attachment"
+  end
+
+  create_table "leave_types", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "records", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "leave_type_id"
+    t.integer  "days"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -40,10 +54,12 @@ ActiveRecord::Schema.define(version: 20170525091511) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "name"
-    t.string   "department"
-    t.boolean  "is_head"
-    t.boolean  "is_director"
-    t.integer  "leave_days",             default: 20
+    t.integer  "department"
+    t.integer  "annual_days"
+    t.integer  "sick_days"
+    t.integer  "unpaid_days"
+    t.integer  "roles_mask"
+    t.integer  "region"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

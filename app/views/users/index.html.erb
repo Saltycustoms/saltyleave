@@ -1,34 +1,56 @@
-<h1>View Users</h1>
+<div class="row">
+  <div class="large-10 large-offset-1 columns">
+    <table>
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :id, 'ID') %></th>
+          <th><%= sort_link(@q, :name, 'Name') %></th>
+          <% if current_user.is_any_of? :director, :admin %>
+            <th><%= sort_link(@q, :department, [:department, 'name asc'], 'Department') %></th>
+          <% end %>
+          <th><%= sort_link(@q, :region, [:region, 'name asc'], 'Region') %></th>
+          <th><%= sort_link(@q, :email, 'Email') %></th>
+          <% LeaveType.all.collect do |l| %>
+            <th><%= sort_link(@q, :records_days, "#{l.name} Leave Days") %></th>
+          <% end %>
+          <th><%= sort_link(@q, :roles_mask, 'Role(s)') %></th>
+        </tr>
+      </thead>
 
-<%= current_user.name %>
-<%= "#{pluralize(current_user.leave_days, 'day')} of leave available" %>
-<%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.id %></td>
+            <td><%= user.name %></td>
+            <% if current_user.is_any_of? :director, :admin %>
+              <td><%= user.department %></td>
+            <% end %>
+            <td><%= user.region %></td>
+            <td><%= user.email %></td>
+            <% if user.records.count > 0 %>
+              <% LeaveType.all.each do |l| %>
+                <td>
+                  <% if user.records.find_by_leave_type_id(l.id)  %>
+                    <%= user.records.find_by_leave_type_id(l.id).days %>
+                  <% else %>
+                    <%= "nil" %>
+                  <% end %>
+                </td>
+              <% end %>
+            <% else %>
+              <td></td>
+              <td></td>
+              <td></td>
+            <% end %>
+            <td><%= user.role_symbols %></td>
+            <% if current_user.is? :admin %>
+              <td><%= link_to 'Edit', edit_user_path(user.id) %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<h2>
-  <%= link_to 'Add User', new_user_path %>
-  <%= link_to 'Back', leave_applications_path %>
-</h2>
-
-<table>
-  <tr>
-    <th><%= sort_link(@q, :id, 'ID') %></th>
-    <th><%= sort_link(@q, :name, 'Name') %></th>
-    <% if current_user.is_director? %>
-      <th><%= sort_link(@q, :department, [:department, 'name'], 'Department') %></th>
-    <% end %>
-    <th><%= sort_link(@q, :email, 'Email') %></th>
-    <th><%= sort_link(@q, :leave_days, [:leave_days, 'name'], 'Remaining Applicable Days')%></th>
-  </tr>
-
-  <% @users.each do |user| %>
-    <tr>
-      <td><%= user.id %></td>
-      <td><%= user.name %></td>
-      <% if current_user.is_director? %>
-        <td><%= user.department %></td>
-      <% end %>
-      <td><%= user.email %></td>
-      <td><%= user.leave_days %></td>
-    </tr>
-  <% end %>
-</table>
+    <a href="/users/new" class="button">Add User</a>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 require 'open-uri'
 class LeaveApplicationsController < ApplicationController
   before_action :authenticate_user!
+  before_filter :set_beginning_of_week
 
   def download
     @leave_application = LeaveApplication.find(params[:id])
@@ -10,7 +11,11 @@ class LeaveApplicationsController < ApplicationController
   end
 
   def index
-    @leave_applications = LeaveApplication.where(user_id: current_user.id)
+    @q = LeaveApplication.ransack(params[:q])
+    @leaves = LeaveApplication.where(status: 1)
+
+    ids = User.where(department: current_user.department).ids
+    @leave_applications = @q.result.where(user_id: ids)
   end
 
   def show
@@ -18,14 +23,12 @@ class LeaveApplicationsController < ApplicationController
   end
 
   def new
-    if current_user.leave_days <= 0
-      #Placeholder: Display an error message
-    else
-      @leave_application = LeaveApplication.new
-    end
+    @leaves = LeaveApplication.where(status: 1)
+    @leave_application = LeaveApplication.new
   end
 
   def edit
+    @leaves = LeaveApplication.where(status: 1)
     @leave_application = LeaveApplication.find(params[:id])
   end
 
@@ -35,7 +38,8 @@ class LeaveApplicationsController < ApplicationController
     if @leave_application.save
       redirect_to @leave_application
     else
-      render 'new'
+      @leaves = LeaveApplication.where(status: 1)
+      render :new
     end
   end
 
@@ -43,19 +47,49 @@ class LeaveApplicationsController < ApplicationController
     @leave_application = LeaveApplication.find(params[:id])
 
     if @leave_application.update(leave_application_params)
-      if @leave_application.approved?
-        duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
-        @leave_application.user.leave_days -= duration
-      end
-      @leave_application.user.save
+      @leave_application.save
       redirect_to @leave_application
     else
-      render 'edit'
+      render :edit
     end
+  end
+
+  def review
+    @leave_application = LeaveApplication.find(params[:id])
+    @leave_application.update_attribute(:status, params[:status].to_i)
+
+    if @leave_application.approved?
+      duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
+      type = @leave_application.leave_type_id
+      @record = @leave_application.user.records.find_by_leave_type_id(type)
+      @record.days -= duration
+      @record.save
+    end
+
+    redirect_to approvals_path
+  end
+
+  def destroy
+    @leave_application = LeaveApplication.find(params[:id])
+    @leave_application.destroy
+
+    if @leave_application.approved?
+      duration = @leave_application.start_date.business_days_until(@leave_application.end_date) + 1
+      type = @leave_application.leave_type_id
+      @record = @leave_application.user.records.find_by_leave_type_id(type)
+      @record.days += duration
+      @record.save
+    end
+
+    redirect_back(fallback_location: root_path)
   end
 
   private
     def leave_application_params
-      params.require(:leave_application).permit(:leave_type, :start_date, :end_date, :leave_duration, :reason, :attachment, :status)
+      params.require(:leave_application).permit(:leave_type_id, :start_date, :end_date, :leave_duration, :reason, :attachment, :status)
+    end
+
+    def set_beginning_of_week
+      Date.beginning_of_week = :sunday
     end
 end

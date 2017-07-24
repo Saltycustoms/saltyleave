@@ -11,8 +11,25 @@
 // about supported directives.
 //
 //= require jquery
-//= require popper
-//= require bootstrap-sprockets
 //= require jquery_ujs
+//= require foundation
 //= require turbolinks
 //= require_tree .
+//= require cocoon
+//= require jquery_nested_form
+//= require moment
+//= require fullcalendar
+
+$(document).on("turbolinks:load", function() {
+  $(function(){
+    $(document).foundation();
+  });
+
+  $(document).ready(function() {
+    $('#calendar').fullCalendar({
+      displayEventTime: false,
+      nextDayThreshold: "00:00:00",
+      events: '/leave_applications.json'
+    });
+  });
+});

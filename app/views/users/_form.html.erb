@@ -1,0 +1,29 @@
+<%= simple_nested_form_for @user do |f| %>
+  <%= f.input :name, error: false %>
+  <%= f.input :department, collection: User.departments.keys %>
+  <%= f.input :region, collection: User.regions.keys, include_blank: false, as: :radio_buttons, error: false %>
+  <%= f.input :roles, collection: User.valid_roles, as: :check_boxes %>
+  <%= f.input :email, error: false %>
+  <%= f.input :password, error: false %>
+
+  <div class="callout">
+    <h5>Assign Leave Types</h5>
+    <%= f.link_to_add "Add Leave Type", :records %>
+    <%= f.simple_fields_for :records do |r| %>
+      <div class="large-12 columns">
+        <div class="large-5 columns">
+          <%= r.input :leave_type_id, label: 'Leave Types', collection: LeaveType.all.collect{|l| [l.name, l.id]}, include_blank: false %>
+        </div>
+        <div class="large-5 columns">
+          <%= r.input :days, as: :integer, placeholder: 14 %>
+        </div>
+        <br>
+        <div class="large-2 columns">
+          <%= r.link_to_remove "Remove" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= f.button :submit, "Save User", class: "button" %>
+<% end %>
